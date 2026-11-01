@@ -289,6 +289,7 @@ input[type=range]{accent-color:var(--tacc);height:28px}
 
 <!-- ===== CRÉATION ===== -->
 <section id="scrCreate" class="screen">
+  <div class="news" id="heirBanner" style="display:none;border-color:var(--gold);margin:0 0 10px"></div>
   <div class="card wide">
     <h2>Scénario</h2>
     <div class="poscards" id="scnCards">
@@ -410,7 +411,9 @@ input[type=range]{accent-color:var(--tacc);height:28px}
         <button class="blue" id="btnSim1">▶ 1 match</button>
         <button class="blue" id="btnSim10">⏩ 10 matchs</button>
         <button class="primary" id="btnSimAll">⏭ Fin de saison</button>
+        <button id="btnQuick" title="Simule toute la saison et montre seulement les moments clés">⚡ Saison rapide</button>
       </div>
+      <div id="styleBar" style="margin-top:8px"></div>
     </div>
     <div class="card"><h2>Objectifs de la saison</h2><div id="objectives"></div></div>
     <div class="card"><h2>Journal</h2><div class="filters" id="logFilters"><button class="on" data-f="all">Tout</button><button data-f="pts">Mes points</button><button data-f="news">Nouvelles</button><button data-f="w">Victoires</button></div><div class="log" id="gameLog"></div></div>
@@ -432,6 +435,9 @@ input[type=range]{accent-color:var(--tacc);height:28px}
   <div class="tab" id="tabPlayer">
     <div class="card"><h2>Attributs <span class="pts" id="bankPts"></span></h2><div id="attrView"></div></div>
     <div class="card"><h2>Contrat</h2><div id="contractView"></div></div>
+    <div class="card"><h2>Relations & popularité</h2><div id="relView"></div></div>
+    <div class="card"><h2>Rival de ta génération</h2><div id="rivalView"></div></div>
+    <div class="card" style="display:none"><h2>Héritage</h2><div id="heirView"></div></div>
     <div class="card"><h2>Trophées</h2><div id="awardsView"></div></div>
   </div>
 
@@ -446,6 +452,7 @@ input[type=range]{accent-color:var(--tacc);height:28px}
   </div>
   <div class="tab" id="tabFin">
     <div class="card"><h2>Finances</h2><div id="finView"></div></div>
+    <div class="card"><h2>Vie hors glace</h2><div id="lifeView"></div></div>
   </div>
   <div class="tab" id="tabLeague">
     <div class="card wide"><h2>Alignements d'une année</h2><div class="row"><select id="archYear"></select><select id="archTeam"></select></div><div id="archView" style="margin-top:8px"></div></div>
@@ -466,6 +473,7 @@ input[type=range]{accent-color:var(--tacc);height:28px}
     <p class="muted" style="margin-top:8px" id="trainNote"></p>
   </div>
   <div class="card" id="endFinCard" style="display:none"><h2>Finances de la saison</h2><div id="endFin"></div></div>
+  <div class="card"><h2>Carte de la saison</h2><canvas id="seasonCard" width="720" height="760" style="width:100%;height:auto;border-radius:12px;display:block"></canvas><div class="btns"><button id="btnSaveSeasonCard">📤 Enregistrer l'image</button></div></div>
   <div class="card" id="endOffersCard" style="display:none"><h2>Offres de contrat</h2><div id="offers"></div></div>
   <div class="btns">
     <button id="btnRetire" style="display:none">Prendre ma retraite</button>
@@ -487,6 +495,7 @@ input[type=range]{accent-color:var(--tacc);height:28px}
   <div class="card"><h2>Totaux en carrière</h2><div class="stat-grid" id="rTotals"></div></div>
   <div class="card"><h2>Trophées</h2><div id="rAwards"></div></div>
   <div class="card"><h2>Saison par saison</h2><div id="rHistory"></div></div>
+  <div class="card" id="coachOfferCard" style="display:none"><h2>Derrière le banc</h2><p style="font-size:13px;margin-bottom:8px">Des équipes te veulent comme <b>entraîneur-chef</b> : tu choisis les trios, le système et tu gères le vestiaire.</p><div id="coachOffers"></div></div>
   <div class="card" id="gmOfferCard" style="display:none"><h2>Deuxième carrière</h2><p style="font-size:13px;margin-bottom:8px">Des équipes veulent t'embaucher comme <b>directeur général</b>. Tu bâtirais l'alignement : repêchage, échanges, agents libres, et tu vivrais les saisons depuis le bureau.</p><div id="gmOffers"></div></div>
   <div class="card"><h2>Ton empreinte</h2><div id="rLegacy"></div></div>
   <div class="card"><h2>Carte de carrière</h2><canvas id="careerCard" width="720" height="1080" style="width:100%;height:auto;border-radius:12px;display:block"></canvas><div class="btns"><button class="primary" id="btnSaveCard">📤 Enregistrer l'image</button></div></div>
@@ -498,6 +507,7 @@ input[type=range]{accent-color:var(--tacc);height:28px}
   <div class="banner" id="gmBanner"></div>
   <div class="tabs" id="gmTabs">
     <button class="on" data-gtab="gtabSeason"><span>Saison</span></button>
+    <button data-gtab="gtabLines" id="tabLinesBtn" style="display:none"><span>Lignes</span></button>
     <button data-gtab="gtabRoster"><span>Alignement</span></button>
     <button data-gtab="gtabTrade"><span>Échanges</span></button>
     <button data-gtab="gtabFA"><span>Agents libres</span></button>
@@ -513,6 +523,7 @@ input[type=range]{accent-color:var(--tacc);height:28px}
     <div class="card"><h2>Objectif du propriétaire</h2><div id="gmGoal"></div></div>
     <div class="card"><h2>Journal</h2><div class="log" id="gmLog"></div></div>
   </div>
+  <div class="tab" id="gtabLines"><div class="card wide"><h2>Trios, système et vestiaire</h2><div id="gmLines"></div></div></div>
   <div class="tab" id="gtabRoster"><div class="card wide"><h2>Alignement & masse salariale</h2><div id="gmRoster"></div></div></div>
   <div class="tab" id="gtabTrade"><div class="card wide"><h2>Marché des échanges</h2><p class="muted" style="margin-bottom:8px">Choisis un de tes joueurs, puis une cible. L'autre DG accepte si la valeur est comparable (cote, âge, salaire).</p><div id="gmTrade"></div></div></div>
   <div class="tab" id="gtabFA"><div class="card wide"><h2>Agents libres</h2><div id="gmFA"></div></div></div>
@@ -574,6 +585,12 @@ input[type=range]{accent-color:var(--tacc);height:28px}
       <p><b>Niveaux</b> : cote ≥ 72 → LNH ; sinon junior jusqu'à 19 ans, puis club-école. Dans la LNH, tu restes si tu gardes ≥ 66.</p>
       <p><b>Contrats</b> : à l'échéance, les offres viennent des équipes qui ont besoin de toi. Regarde les impôts : 50 % au Canada, 37 % en Floride, au Texas, à Vegas, Seattle ou Nashville.</p>
       <p><b>Ligue vivante</b> : chaque été, les vrais joueurs vieillissent, les vétérans prennent leur retraite, les repêchés montent du club-école.</p>
+      <p><b>Approche de match</b> : sous les boutons de simulation, choisis Équilibré, Offensif, Physique ou Prudent (gardien : Classique, Agressif, Profond). Ça change ta production, ton +/-, tes punitions et le risque de blessure.</p>
+      <p><b>Relations</b> : tes compagnons de trio ont une chimie (onglet Joueur) qui monte avec les victoires et tes points et augmente ta production. Jeune, un vétéran peut devenir ton mentor (+1 point par saison) ; plus tard, tu prends des recrues sous ton aile.</p>
+      <p><b>Popularité</b> : entrevues, controverses, commandites, naissances… Elle décide de la valeur de tes commandites et des surnoms que les partisans te donnent.</p>
+      <p><b>Rival de génération</b> : dès ton arrivée dans la LNH, un vrai joueur de ton âge devient ton rival de carrière ; vos saisons sont comparées jusqu'à la retraite.</p>
+      <p><b>Après la carrière</b> : chandail retiré, Temple de la renommée (3 ans plus tard), poste de DG ou d'entraîneur-chef, et Nouvelle partie + avec ton enfant comme héritier.</p>
+      <p><b>Saison rapide</b> : simule tout d'un coup, ne s'arrête que pour tes décisions et montre les moments clés avant les séries.</p>
     </div></details>
     <details><summary><b>Conseils</b></summary><div class="help">
       <p>Un ailier marque plus de buts, un centre fait plus de passes, un défenseur vise le Norris et les gros contrats, un gardien gagne le plus de Coupes mais a besoin d'une bonne équipe devant lui.</p>
@@ -824,7 +841,7 @@ const WEIGHTS={C:[.16,.16,.18,.14,.08,.12,.16],AG:[.17,.2,.14,.16,.1,.07,.16],AD
 const AWARD_INFO={hart:["🏆","Trophée Hart","Joueur le plus utile"],ross:["🎯","Trophée Art Ross","Meilleur pointeur"],richard:["🚨","Trophée Rocket Richard","Meilleur buteur"],calder:["🌱","Trophée Calder","Recrue de l'année"],norris:["🛡️","Trophée Norris","Meilleur défenseur"],vezina:["🧱","Trophée Vézina","Meilleur gardien"],smythe:["⭐","Trophée Conn Smythe","JPU des séries"],cup:["🏆","Coupe Stanley","Champion"],jr_cup:["🥇","Championnat junior","Champion de ligue"],jr_top:["🎯","Meilleur pointeur junior",""],memorial:["🏅","Coupe Memorial",""],
  wjc_gold:["🥇","Or — Mondial junior",""],wjc_silver:["🥈","Argent — Mondial junior",""],wjc_bronze:["🥉","Bronze — Mondial junior",""],
  oly_gold:["🥇","Or olympique",""],oly_silver:["🥈","Argent olympique",""],oly_bronze:["🥉","Bronze olympique",""],
- allstar:["⭐","Match des étoiles",""],captain:["🅲","Nommé capitaine",""],
+ allstar:["⭐","Match des étoiles",""],po_hero:["🦸","Héros des séries","Buts décisifs en prolongation, match no 7 ou élimination"],captain:["🅲","Nommé capitaine",""],
  jr_mvp:["🏆","Joueur de l'année junior",""],jr_def:["🛡️","Défenseur de l'année junior",""],jr_goalie:["🧱","Gardien de l'année junior",""],
  ahl_top:["🎯","Meilleur pointeur AHL",""],ahl_mvp:["🏆","Joueur de l'année AHL",""],ahl_goalie:["🧱","Gardien de l'année AHL",""],presidents:["🏆","Trophée des Présidents","Meilleure équipe de la saison"],wc_gold:["🥇","Or — Championnat mondial",""],wc_silver:["🥈","Argent — Championnat mondial",""],wc_bronze:["🥉","Bronze — Championnat mondial",""],team_mvp:["⭐","Joueur de l'année de l'équipe","Voté par les partisans"],calder_cup:["🏆","Coupe Calder","Champion de la AHL"]};
 const COUNTRY_STR={Canada:92,"États-Unis":91,Suède:88,Finlande:87,Russie:86,Tchéquie:85,Suisse:82,Slovaquie:80,Allemagne:79,Lettonie:74,Norvège:70,Danemark:72,Autriche:69,Kazakhstan:66};
@@ -907,7 +924,7 @@ function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.re
 /* ================== ÉTAT ================== */
 let S=null;
 const SAVE_KEY="carriere_hockey_v1";
-const SAVE_VERSION=3;let lastBackupAt=0;
+const SAVE_VERSION=4;let lastBackupAt=0;
 function save(){try{if(!S)return;S.v=SAVE_VERSION;const json=JSON.stringify(S,(k,v)=>k==="_res"?undefined:v);
   // copie de secours : au plus une fois par 2 minutes, et seulement si la partie a avancé
   const now=Date.now();if(now-lastBackupAt>120000){const prev=localStorage.getItem(SAVE_KEY);if(prev&&prev!==json)localStorage.setItem(SAVE_KEY+"_bak",prev);lastBackupAt=now;}
@@ -915,6 +932,7 @@ function save(){try{if(!S)return;S.v=SAVE_VERSION;const json=JSON.stringify(S,(k
 function migrate(d){if(!d||!d.player)return d;const v=d.v||1;
   if(v<2){d.player.done=d.player.done||{};d.player.milestones=d.player.milestones||[];}
   if(v<3){d.coaches=d.coaches||{};d.picks=d.picks||null;d.expansionsDone=d.expansionsDone||[];if(d.season&&!d.season.objectives)d.season.objectives=[];}
+  if(v<4){d.life=d.life||{pop:50,spouse:null,kids:[],sponsors:[],nicks:[],popLog:[]};d.rel=d.rel||{mates:[],mentor:null};d.postEvents=d.postEvents||[];}
   d.v=SAVE_VERSION;return d;}
 function load(){try{const d=localStorage.getItem(SAVE_KEY);return d?migrate(JSON.parse(d)):null;}catch(e){try{const b=localStorage.getItem(SAVE_KEY+"_bak");return b?migrate(JSON.parse(b)):null;}catch(x){return null;}}}
 function restoreBackup(){try{const b=localStorage.getItem(SAVE_KEY+"_bak");if(!b){toast("Aucune copie de secours.");return;}if(!confirm("Restaurer la copie de secours ? La partie actuelle sera remplacée."))return;localStorage.setItem(SAVE_KEY,b);location.reload();}catch(e){toast("Impossible de restaurer.");}}
@@ -1012,7 +1030,8 @@ $("btnStart").onclick=()=>{
     year:2026,level:"JR",team:null,contract:null,season:null,history:[],careerSeason:0,news:[]
   };
   const carry=(S_prev=>S_prev&&S_prev.ngCarry)(load());
-  if(carry){S.expansionsDone=carry.expansionsDone||[];restoreExpansions();S.relocations=carry.relocations||[];restoreRelocations();S.coaches=carry.coaches||{};S.year=carry.year;S.rosters=carry.rosters;S.ahlRosters=carry.ahlRosters;S.jrAll=carry.jrAll;S.leagueHistory=carry.leagueHistory||[];S.recordBook=carry.recordBook||{};S.legacyPlayers=carry.legacyPlayers||[];S.gen=carry.gen;S.leagueNews=[];
+  if(carry){S.expansionsDone=carry.expansionsDone||[];restoreExpansions();S.relocations=carry.relocations||[];restoreRelocations();S.coaches=carry.coaches||{};S.year=carry.year;S.rosters=carry.rosters;S.ahlRosters=carry.ahlRosters;S.jrAll=carry.jrAll;S.leagueHistory=carry.leagueHistory||[];S.recordBook=carry.recordBook||{};S.legacyPlayers=carry.legacyPlayers||[];S.gen=carry.gen;S.leagueNews=[];S.postEvents=carry.postEvents||[];
+    if(carry.heir){S.heir=carry.heir;const p=S.player;if(p.pos===carry.heir.parentPos){carry.heir.bonusIdx.forEach(i=>{p.attrs[i]=clamp(p.attrs[i]+3,30,90);});}else{p.attrs=p.attrs.map(v=>clamp(v+1,30,90));}p.potential=Math.min(99,p.potential+3);p.num=p.num===97?carry.heir.parentNum:p.num;lifeOf().pop=62;S.leagueNews.push(`👨‍👧 ${p.first} ${p.last}, ${carry.heir.girl?"fille":"fils"} de <b>${carry.heir.parent}</b>, commence sa carrière. Les attentes sont énormes.`);}
     // le junior a besoin d'un alignement pour ma ligue : évoluer déjà fait ; s'assurer que la ligue junior existe
     if(!S.jrAll[S.player.jrLeague]){S.jrAll[S.player.jrLeague]={};Object.keys(JR_ROSTERS[S.player.jrLeague]||{}).forEach(k=>S.jrAll[S.player.jrLeague][k]=JR_ROSTERS[S.player.jrLeague][k].map(x=>withAge(x,()=>ri(16,19))));}
   }else initRosters();
@@ -1066,10 +1085,12 @@ function makeTeams(level){
     return {id:i,city:t[0],name:t[1],str,w:0,l:0,otl:0,gf:0,ga:0};
   });
 }
+function nhlName(i){const t=NHL[i];return t?teamName({city:t[0],name:t[1]}):"—";}
 function teamName(t){if(!t)return "—";return t.city.endsWith(t.name)?t.city:`${t.city} ${t.name}`;}
 function assignJuniorTeam(){S.team={level:"JR",id:ri(0,JR[S.player.jrLeague].length-1)};}
 function withAge(x,def){const y=x.slice(0,3);y.push(typeof x[3]==="number"?x[3]:def());return y;}
 function initRosters(){
+  resetLeagueArrays();
   S.rosters=ROSTERS.map(r=>r.map(x=>withAge(x,()=>ri(23,31))));
   S.ahlRosters=AHL_TEAMS.map(t=>(t.players||[]).map(x=>withAge(x,()=>ri(21,27))));
   S.jrAll={};
@@ -1267,6 +1288,7 @@ function startSeason(){
   if(S.nextForm){S.season.form=S.nextForm;S.season.formUntil=20;S.nextForm=null;}
   S.season.coach=coachOf(level,S.team.id);S.season.coachMult=COACH_STYLES[S.season.coach.style].pts;
   S.season.objectives=seasonObjectives();
+  relNewSeason();genRivalInit();
   S.news=[];
   renderSeason();show("scrSeason");save();
 }
@@ -1322,7 +1344,7 @@ function weekRecap(fromIdx){
 /* joue 1 match avec animation : simule d'abord, puis rejoue le fil des buts */
 let liveTimer=null;
 function playOneLive(opts){
-  opts=opts||{};const se=S.season;if(se.inPlayoffs){poPlayGame(true);const e=se.log[0];if(e&&e._res&&OPT.anim&&se.po)animateEntry(e,opts);return;}
+  opts=opts||{};const se=S.season;if(se.inPlayoffs){const ok=poPlayGame(true);if(ok===false)return;const e=se.log.find(l=>l._res);if(e&&OPT.anim&&se.po&&!se.playoffs)animateEntry(e,opts);else if(momentQueue.length)playMoments(()=>renderSeason());return;}
   if(se.done||(se.event&&!opts.chain))return;
   simGame();
   const entry=se.log.find(l=>l._res);
@@ -1338,34 +1360,35 @@ function animateEntry(entry,opts){
   $("liveSA").textContent="0";$("liveSB").textContent="0";$("liveFeed").innerHTML="";
   $("live").classList.add("on");
   const myName=S.player.first+" "+S.player.last;
-  const evs=res.events.slice();const periods=res.ot?4:3;
+  const evs=res.events.slice();const periods=res.ot?3+(res.otN||1):3;
   let sa=0,sb=0;const stepMs=opts.fast?22:65;
   SFX.whistle();
   const pending=se.event;se.event=null;
   $("liveSkip").textContent=opts.chain?"Passer tout":"Passer";
-  const finish=(skipAll)=>{clearInterval(liveTimer);liveTimer=null;$("live").classList.remove("on");if(S.season&&S.season.gm)renderGM();else renderSeason();save();if(pending)se.event=pending;if(opts.onDone)opts.onDone(skipAll);else if(pending)showEvent(pending);};
+  const finish=(skipAll)=>{clearInterval(liveTimer);liveTimer=null;$("live").classList.remove("on");if(S.season&&S.season.gm)renderGM();else renderSeason();save();if(pending)se.event=pending;const after=()=>{if(opts.onDone)opts.onDone(skipAll);else if(pending)showEvent(pending);};if(momentQueue.length&&!opts.chain&&!(S.season&&S.season.gm))playMoments(after);else after();};
   $("liveSkip").onclick=()=>finish(true);
   $("liveTitle").textContent=opts.label||"";
   let per=1,min=0;
   liveTimer=setInterval(()=>{
     min++;if(min>20){min=1;per++;if(per>periods){setTimeout(()=>finish(false),opts.fast?250:500);clearInterval(liveTimer);return;}
-      if(per===4){$("liveFeed").insertAdjacentHTML("afterbegin",`<div>Prolongation</div>`);}}
-    $("livePer").textContent=per===4?"Prolongation":per+(per===1?"re":"e")+" période";
+      if(per>=4){$("liveFeed").insertAdjacentHTML("afterbegin",`<div>${perLabel(per)}${per>4?" — les jambes sont lourdes":""}</div>`);}}
+    $("livePer").textContent=perLabel(per);
     $("liveClock").textContent=String(20-min).padStart(2,"0")+":00";
     while(evs.length&&(evs[0].per<per||(evs[0].per===per&&evs[0].min<min))){
       const e=evs.shift();const isMine=e.t===mine.id;
       const sc=$(isMine?"liveSA":"liveSB");if(isMine)sa++;else sb++;sc.textContent=isMine?sa:sb;sc.classList.remove("flash");void sc.offsetWidth;sc.classList.add("flash");
       if(isMine){SFX.horn();buzz([40,30,40]);const L=$("liveLamp");L.classList.remove("on");void L.offsetWidth;L.classList.add("on");}else SFX.oppGoal();
       const me1=e.scorer===myName||e.assist===myName;
-      $("liveFeed").insertAdjacentHTML("afterbegin",`<div class="goal ${me1?"mine":""}"><b>BUT</b> ${isMine?mine.city:opp.city} — ${e.scorer}${e.assist?` <span class="muted">(${e.assist})</span>`:""} <span class="muted">· ${e.per>3?"P":"P"+e.per} ${String(e.min).padStart(2,"0")}:${String(e.sec).padStart(2,"0")}</span></div>`);
+      $("liveFeed").insertAdjacentHTML("afterbegin",`<div class="goal ${me1?"mine":""}"><b>BUT</b> ${isMine?mine.city:opp.city} — ${e.scorer}${e.assist?` <span class="muted">(${e.assist})</span>`:""} <span class="muted">· ${perLabel(e.per,true)} ${String(e.min).padStart(2,"0")}:${String(e.sec).padStart(2,"0")}</span></div>`);
       const f=$("liveFeed");while(f.children.length>4)f.removeChild(f.lastChild);
     }
   },stepMs);
 }
-function simMatch(A,B,isMine){
+function simMatch(A,B,isMine,po){
   const p=S.player,se=S.season,me=se.teams[S.team.id];
   const ovr=overall(p);
   let sA=A.str,sB=B.str;
+  const sty=isMine?styleOf():"bal";const rivT=isMine&&S.genRival&&!S.genRival.retired?(se.rivalTeam==null?(se.rivalTeam=genRivalTeam()):se.rivalTeam):-1;
   // performance du joueur
   let my=null;
   if(isMine&&se.injuryGames===0){
@@ -1377,7 +1400,7 @@ function simMatch(A,B,isMine){
       if(Math.random()<starts){
         const shots=ri(22,38);
         se.gStreak=(se.gStreak||0)+1;const fatigue=se.gStreak>=6?.006:se.gStreak>=4?.003:0;
-        const svp=clamp(.862+(ovr-60)*.0019+gauss(0,.025)-fatigue,.80,.975);
+        const svp=clamp(.862+(ovr-60)*.0019+gauss(0,sty==="agg"?.036:sty==="deep"?.017:.025)+(sty==="agg"?.003:sty==="deep"?-.001:0)-fatigue,.80,.975);
         let ga=0;for(let i=0;i<shots;i++)if(Math.random()>svp)ga++;
         my={goalie:true,shots,ga,sv:shots-ga};
         // la force de mon équipe en défense dépend de moi
@@ -1390,33 +1413,36 @@ function simMatch(A,B,isMine){
       const posF=p.pos==="D"?.55:1;
       const lvl=[1.35,1.0,.82][tier];
       const form=(se.form&&se.gamesPlayed<se.formUntil)?se.form:1;
-      const lambdaP=Math.max(.05,(off-40)/40*lvl*posF*(toi/18))*(0.9+rnd(0,.25))*form*(se.coachMult||1);
+      const styM=sty==="off"?1.12:sty==="phys"?.95:sty==="safe"?.88:1;const rivM=(rivT>=0&&(A.id===rivT||B.id===rivT))?1.08:1;
+      const lambdaP=Math.max(.05,(off-40)/40*lvl*posF*(toi/18))*(0.9+rnd(0,.25))*form*(se.coachMult||1)*relMult()*styM*rivM;
       const shots=Math.max(0,Math.round(gauss(lambdaP*2.6+1,1.4)));
       let g=0,a=0;
       const pG=lambdaP*(p.pos==="D"?.35:.48);
       const pA=lambdaP*(p.pos==="D"?.75:.6);
       for(let k=0;k<3;k++){if(Math.random()<pG/3)g++;if(Math.random()<pA/3)a++;}
-      const pim=Math.random()<(p.attrs[4]/100)*.25?2:0;
-      const ppP=(g+a)>0?(Math.random()<.3?1:0):0;const hits=Math.round(gauss(p.attrs[4]/40,.8));const blk=p.pos==="D"?Math.round(gauss(p.attrs[5]/45,.9)):Math.round(gauss(.5,.5));
+      const pim=Math.random()<(p.attrs[4]/100)*.25*(sty==="phys"?1.8:1)?(sty==="phys"&&Math.random()<.3?5:2):0;
+      const ppP=(g+a)>0?(Math.random()<.3?1:0):0;const hits=Math.round(gauss(p.attrs[4]/40,.8)*(sty==="phys"?1.6:sty==="safe"?.8:1));const blk=(p.pos==="D"?Math.round(gauss(p.attrs[5]/45,.9)):Math.round(gauss(.5,.5)))*(sty==="safe"?1.3:1)|0;
       my={goalie:false,g,a,shots:Math.max(shots,g),pim,toi:+(toi+gauss(0,1.2)).toFixed(1),mine,opp,ppP,hits:Math.max(0,hits),blk:Math.max(0,blk),gwg:0};
-      if(mine===A)sA+=g*2+a; else sB+=g*2+a;
+      const tb=g*2+a+(sty==="phys"?.6:0)-(sty==="off"?.4:0)+(sty==="safe"?.3:0);if(mine===A)sA+=tb; else sB+=tb;
+      my.sty=sty;
     }
   }
   // résultat
   const diff=(sA-sB)/10+gauss(0,1.6);
   let gA=clamp(Math.round(2.9+diff/2+gauss(0,1)),0,8),gB=clamp(Math.round(2.9-diff/2+gauss(0,1)),0,8);
-  let ot=false;
-  if(gA===gB){ot=true;if(Math.random()<.5+diff*.08)gA++;else gB++;}
+  let ot=false,otN=0;
+  if(gA===gB){ot=true;otN=1;if(po){while(Math.random()<.3&&otN<4)otN++;}if(Math.random()<.5+diff*.08)gA++;else gB++;}
   A.gf+=gA;A.ga+=gB;B.gf+=gB;B.ga+=gA;
   if(gA>gB){A.w++;if(ot)B.otl++;else B.l++;}else{B.w++;if(ot)A.otl++;else A.l++;}
   // cohérence buts du joueur
   if(my&&!my.goalie){const myGoals=my.mine===A?gA:gB;if(my.g>myGoals)my.g=myGoals;if(my.a>myGoals)my.a=myGoals;}
   if(my&&my.goalie){my.ga=my.opp===A?gA:gB;my.sv=Math.max(0,my.shots-my.ga);}
-  const events=isMine?goalEvents(A,B,gA,gB,ot,my):null;
-  return {gA,gB,ot,my,events};
+  const events=isMine?goalEvents(A,B,gA,gB,ot,my,otN):null;
+  if(my&&!my.goalie){const pmAdj=sty==="off"?-.25:sty==="safe"?.25:0;my.pmAdj=pmAdj;}
+  return {gA,gB,ot,otN,my,events};
 }
 /* génère la liste des buts d'un match (buteur, passeur, période, temps) */
-function goalEvents(A,B,gA,gB,ot,my){
+function goalEvents(A,B,gA,gB,ot,my,otN){
   const se=S.season,p=S.player,me=se.teams[S.team.id];
   const pickScorer=(team,excl)=>{
     const r=rosterOf(se.level,team.id).filter(x=>x[1]!=="G"&&!excl.includes(x[0]));
@@ -1437,7 +1463,7 @@ function goalEvents(A,B,gA,gB,ot,my){
   };
   build(A,gA,A.id===me.id);build(B,gB,B.id===me.id);
   ev.sort((x,y)=>x.per-y.per||x.min-y.min||x.sec-y.sec);
-  if(ot&&ev.length){const last=(gA>gB)?[...ev].reverse().find(e=>e.t===A.id):[...ev].reverse().find(e=>e.t===B.id);if(last){ev.splice(ev.indexOf(last),1);last.per=4;last.min=ri(0,4);ev.push(last);}}
+  if(ot&&ev.length){const last=(gA>gB)?[...ev].reverse().find(e=>e.t===A.id):[...ev].reverse().find(e=>e.t===B.id);if(last){ev.splice(ev.indexOf(last),1);last.per=3+(otN||1);last.min=otN>1||S.season.inPlayoffs?ri(0,19):ri(0,4);ev.push(last);}}
   return ev;
 }
 function logMyGame(A,B,res){
@@ -1465,7 +1491,7 @@ function logMyGame(A,B,res){
       // séquences
       se.ptStreak=se.ptStreak||0;se.bestPtStreak=se.bestPtStreak||0;
       if(res.my.g+res.my.a>0){se.ptStreak++;if(se.ptStreak>se.bestPtStreak)se.bestPtStreak=se.ptStreak;if(se.ptStreak===5||se.ptStreak===10||se.ptStreak===15||se.ptStreak===20){addNews(`🔥 Séquence de ${se.ptStreak} matchs avec au moins un point !`);}}else se.ptStreak=0;
-      const pm=Math.round((myG-oppG)*rnd(.3,.8)+res.my.g*.4);st.pm+=pm;
+      const pm=Math.round((myG-oppG)*rnd(.3,.8)+res.my.g*.4+(res.my.pmAdj||0)+(Math.random()<.5?0:(res.my.pmAdj||0)));st.pm+=pm;
       if(res.my.g||res.my.a){line+=` — <span class="o">${res.my.g} B, ${res.my.a} A</span>`;}
       if(res.my.g>=3)line+=" 🎩 TOUR DU CHAPEAU";
     }
@@ -1476,8 +1502,9 @@ function logMyGame(A,B,res){
     if(!res.my.goalie&&res.my.g+res.my.a>=4)se.highlights.push(`⚡ ${res.my.g+res.my.a} points vs ${opp.city}`);
     // blessure
     if(S.arcs&&S.arcs.farewell&&S.arcs.farewell.announced&&S.arcs.farewell.year===S.year&&Math.random()<.08){line+=` 🎁 Hommage à ${opp.city}`;se.highlights=se.highlights||[];se.highlights.push(`🎁 Hommage d'adieu à ${opp.city}`);}
+    relAfterGame(res,won);
     if(Math.random()<.0015&&!se.seriousDone){seriousInjury(line);return;}
-    if(Math.random()<.012){se.injuryGames=ri(3,15);line+=` 🚑 Blessé (${se.injuryGames} matchs)`;}
+    if(Math.random()<.012*(res.my.sty==="phys"?1.5:res.my.sty==="safe"?.6:1)){se.injuryGames=ri(3,15);line+=` 🚑 Blessé (${se.injuryGames} matchs)`;}
   }else if(se.injuryGames>0){line+=` <span class="muted">(blessé)</span>`;}
   else line+=` <span class="muted">(réserviste)</span>`;
   // détail du match
@@ -1486,14 +1513,15 @@ function logMyGame(A,B,res){
     const per=[1,2,3,4].map(pp=>[res.events.filter(e=>e.per===pp&&e.t===mine.id).length,res.events.filter(e=>e.per===pp&&e.t===opp.id).length]);
     detail+=`<div class="muted">${mine.city} ${per[0][0]}-${per[1][0]}-${per[2][0]}${res.ot?"-"+per[3][0]:""} | ${opp.city} ${per[0][1]}-${per[1][1]}-${per[2][1]}${res.ot?"-"+per[3][1]:""}</div>`;
     const myName=p.first+" "+p.last;
-    res.events.forEach(e=>{const me1=e.scorer===myName||e.assist===myName;detail+=`<div style="${me1?"color:var(--gold);font-weight:700":""}">${e.per===4?"P":"P"+e.per} ${String(e.min).padStart(2,"0")}:${String(e.sec).padStart(2,"0")} — ${e.t===mine.id?mine.city:opp.city} : ${e.scorer}${e.assist?` <span class="muted">(${e.assist})</span>`:""}</div>`;});
+    res.events.forEach(e=>{const me1=e.scorer===myName||e.assist===myName;detail+=`<div style="${me1?"color:var(--gold);font-weight:700":""}">${perLabel(e.per,true)} ${String(e.min).padStart(2,"0")}:${String(e.sec).padStart(2,"0")} — ${e.t===mine.id?mine.city:opp.city} : ${e.scorer}${e.assist?` <span class="muted">(${e.assist})</span>`:""}</div>`;});
     if(res.my&&res.my.goalie)detail+=`<div class="muted">Toi : ${res.my.sv} arrêts sur ${res.my.shots} tirs</div>`;
     if(res.my&&!res.my.goalie)detail+=`<div class="muted">Toi : ${res.my.shots} tirs, ${res.my.toi} min, ${res.my.pim} PUN</div>`;
   }
   if(res.stars&&res.stars.length)detail+=`<div class="muted">★ ${res.stars.map((n,i)=>(i+1)+"ʳᵉ ".replace("ʳᵉ",i===0?"re":"e")+n).join(" · ")}</div>`;
-  se.log.unshift({w:won,html:`<span class="muted">${gameDate(se.gamesPlayed,se.gp,S.year)}</span> ${line}`,d:detail,pts:!!(res.my&&!res.my.goalie&&(res.my.g||res.my.a)),_res:{events:res.events,ot:res.ot,A:{id:A.id,city:A.city},B:{id:B.id,city:B.city},stars:res.stars,my:res.my?{g:res.my.g,a:res.my.a,sv:res.my.sv,shots:res.my.shots,goalie:res.my.goalie}:null,score:[myG,oppG],opp:opp.city,won}});
+  se.log.unshift({w:won,html:`<span class="muted">${gameDate(se.gamesPlayed,se.gp,S.year)}</span> ${line}`,d:detail,pts:!!(res.my&&!res.my.goalie&&(res.my.g||res.my.a)),_res:{events:res.events,ot:res.ot,otN:res.otN,A:{id:A.id,city:A.city},B:{id:B.id,city:B.city},stars:res.stars,my:res.my?{g:res.my.g,a:res.my.a,sv:res.my.sv,shots:res.my.shots,goalie:res.my.goalie}:null,score:[myG,oppG],opp:opp.city,won}});
   if(se.log.length>120)se.log.pop();
   checkMilestones();
+  if(res.my&&!se.event)mediaAfterGame(res,won,opp);
 }
 
 /* ================== ÉVÉNEMENTS ================== */
@@ -1578,6 +1606,365 @@ function tournamentText(r,name){
   if(r.bracket)t+=`<details style="margin-top:4px"><summary class="muted" style="cursor:pointer">Tableau</summary>${r.bracket.map(b=>`<div class="muted" style="font-size:12px">${b}</div>`).join("")}</details>`;
   return t;
 }
+/* ================== CARTE DE SAISON · SAISON RAPIDE ================== */
+function drawSeasonCard(rec,awards){
+  const cv=$("seasonCard");if(!cv||!cv.getContext)return;const c=cv.getContext("2d");const W=cv.width,H=cv.height;const p=S.player,se=S.season,po=se.playoffs;const g=p.pos==="G";
+  const [c1,c2]=teamColors(se.level,S.team.id);
+  const grd=c.createLinearGradient(0,0,W,H);grd.addColorStop(0,c1);grd.addColorStop(.55,"#0b1220");grd.addColorStop(1,"#05080f");c.fillStyle=grd;c.fillRect(0,0,W,H);
+  const img=new Image();img.src=po&&po.won?IMG.cup:IMG.arena;
+  const draw=()=>{
+    try{c.globalAlpha=po&&po.won?.18:.22;const ih=W*img.height/img.width;c.drawImage(img,0,H-ih,W,ih);c.globalAlpha=1;}catch(e){}
+    c.fillStyle="rgba(0,0,0,.3)";c.fillRect(0,0,W,H);
+    c.textAlign="center";c.fillStyle="#ffd166";c.font="700 24px Oswald, sans-serif";c.fillText(`SAISON ${S.year}-${S.year+1} · ${se.level==="JR"?p.jrLeague:se.level==="AHL"?"AHL":"LNH"}`,W/2,60);
+    c.fillStyle="#fff";c.font="700 56px Oswald, sans-serif";c.fillText((p.first+" "+p.last).toUpperCase(),W/2,130);
+    c.fillStyle="#c9d3ef";c.font="22px system-ui, sans-serif";c.fillText(`${rec.team} · ${p.age-1} ans · cote ${rec.ovr}${p.nick?` · « ${p.nick} »`:""}`,W/2,166);
+    const res=po?(po.won?(se.level==="NHL"?"CHAMPIONS DE LA COUPE STANLEY":"CHAMPIONS"):!po.qualified?"Séries ratées":`Éliminés en ${po.series.length===1?"1re ronde":po.series.length+"e ronde"}`):"";
+    c.fillStyle=po&&po.won?"#ffd166":"#fff";c.font="700 30px Oswald, sans-serif";c.fillText(res,W/2,215);
+    const cells=g?[["PJ",rec.gp],["V",rec.w],["%ARR",rec.svp.toFixed(3)],["BL",rec.so]]:[["PJ",rec.gp],["B",rec.g],["A",rec.a],["PTS",rec.pts],["+/-",(rec.pm>0?"+":"")+rec.pm]];
+    const cw=W/cells.length;cells.forEach((cell,i)=>{c.fillStyle="rgba(0,0,0,.42)";c.fillRect(i*cw+10,250,cw-20,100);c.fillStyle="#fff";c.font="700 44px Oswald, sans-serif";c.fillText(String(cell[1]),i*cw+cw/2,306);c.fillStyle="#c9d3ef";c.font="17px system-ui, sans-serif";c.fillText(cell[0],i*cw+cw/2,336);});
+    c.textAlign="left";let y=400;
+    if(awards.length){c.fillStyle="#ffd166";c.font="700 22px Oswald, sans-serif";c.fillText("TROPHÉES",40,y);y+=34;c.fillStyle="#fff";c.font="21px system-ui, sans-serif";awards.slice(0,4).forEach(a=>{c.fillText("• "+AWARD_INFO[a][1],40,y);y+=30;});y+=10;}
+    const hl=(se.highlights||[]).slice(0,6);
+    c.fillStyle="#ffd166";c.font="700 22px Oswald, sans-serif";c.fillText("MOMENTS FORTS",40,y);y+=34;c.fillStyle="#fff";c.font="20px system-ui, sans-serif";
+    (hl.length?hl:["Une saison de travail."]).forEach(h=>{const t=em(h).replace(/<[^>]+>/g,"").replace(/^[^\wÀ-ÿ«"]+/,"");c.fillText("• "+(t.length>52?t.slice(0,51)+"…":t),40,y);y+=30;});
+    if(S.objResult&&S.objResult.total){y+=10;c.fillStyle="#c9d3ef";c.fillText(`Objectifs du coach : ${S.objResult.ok}/${S.objResult.total}`,40,y);y+=30;}
+    c.textAlign="center";c.fillStyle="#8fa0c7";c.font="17px system-ui, sans-serif";c.fillText(`Carrière hockey · saison ${S.careerSeason}`,W/2,H-24);
+  };
+  if(img.complete)draw();else{img.onload=draw;img.onerror=draw;}
+}
+/* saison rapide : tout simuler, ne s'arrêter que pour les décisions, puis montrer les moments clés */
+function quickSeason(){
+  const se=S.season;if(se.inPlayoffs||se.done){$("btnSimAll").click();return;}
+  busy(true,"Saison rapide…");
+  setTimeout(()=>{
+    runSims(999);busy(false);
+    if(se.event){const ev=se.event;se.event=null;const wrapped={title:ev.title,text:ev.text,choices:ev.choices.map(c=>({label:c.label,sub:c.sub,run:()=>{c.run();setTimeout(quickSeason,50);}}))};showEvent(wrapped);return;}
+    if(se.done)keyMomentsRecap(()=>askGame7(()=>endSeason()));
+  },30);
+}
+function keyMomentsRecap(cb){
+  const se=S.season,p=S.player,st=se.stats;const me=se.teams[S.team.id];
+  const sorted=se.teams.slice().sort((a,b)=>(b.w*2+b.otl)-(a.w*2+a.otl));const rank=sorted.findIndex(t=>t.id===S.team.id)+1;
+  const items=[];(se.highlights||[]).slice(0,5).forEach(h=>items.push(h));
+  if(se.bestPtStreak>=5)items.push(`🔥 Séquence de ${se.bestPtStreak} matchs avec un point`);
+  if(se.starCount>=5)items.push(`★ Première étoile ${se.starCount} fois`);
+  (se.seasonNews||[]).filter(n=>/Échangé|Mondial|olympique|étoiles|capitaine|Naissance|fiancé|surnom|Temple|Rivalité/i.test(n)).slice(0,3).forEach(n=>items.push(n));
+  const my=p.pos==="G"?`${st.w} V · ${(st.sv+st.ga?st.sv/(st.sv+st.ga):0).toFixed(3)} · ${st.so} BL`:`${st.g} B, ${st.a} A — ${st.pts} pts`;
+  const box=$("momentInner");
+  box.innerHTML=`<div class="recap"><div class="line sub" style="animation-delay:0s">Saison ${S.year}-${S.year+1} · ${me.city} ${rank}${rank===1?"er":"e"} (${me.w}-${me.l}-${me.otl})</div>
+   <div class="line huge" style="animation-delay:.2s">${my}</div>
+   <div class="line sub" style="animation-delay:.4s">Moments clés</div>
+   <div class="line" style="animation-delay:.5s;text-align:left;max-width:380px;margin:0 auto;font-size:14px">${(items.length?items:["Une saison sans éclat particulier."]).map((t,i)=>`<div style="margin:4px 0">${t}</div>`).join("")}</div>
+   <button class="primary" style="--d:.9s">${rank<=16?"Place aux séries":"Bilan de saison"}</button></div>`;
+  box.querySelector("button").onclick=()=>{$("moment").classList.remove("on");cb();};
+  $("moment").classList.remove("draft");$("moment").classList.add("on");window.scrollTo(0,0);
+}
+function laterNews(h){(S.pendingNews=S.pendingNews||[]).push(h);}
+/* ================== APRÈS-CARRIÈRE : TEMPLE, CHANDAIL RETIRÉ · ENTRAÎNEUR-CHEF · HÉRITIER ================== */
+function jerseyTeam(){
+  const fr=franchiseRecords();const p=S.player;const g=p.pos==="G";let best=null;
+  Object.keys(fr).forEach(t=>{const o=fr[t];const id=NHL.findIndex(n=>teamName({city:n[0],name:n[1]})===t);const big=id>=0&&[1,14,26,9,5,21,18,10].includes(id);
+    const bar=g?(big?480:330):(big?1500:900);const stat=g?o.w:o.pts;
+    const ok=o.seasons>=7&&(stat>bar*.6||o.cups>=2||(o.cups>=1&&stat>bar*.4));
+    if(ok&&(!best||o.seasons>best.o.seasons))best={t,id,o};});
+  return best;
+}
+/* planifie les cérémonies d'après-carrière (jouées si la ligue continue : DG, entraîneur, NG+) */
+function planPostCareer(){
+  const p=S.player;const ev=S.postEvents=S.postEvents||[];const name=p.first+" "+p.last;
+  if(ev.some(e=>e.who===name))return;
+  const jt=jerseyTeam();
+  if(jt)ev.push({who:name,year:S.year+1,type:"jersey",team:jt.t,teamId:jt.id,num:p.num||97});
+  if(S.hof)ev.push({who:name,year:S.year+3,type:"hof",pos:p.pos,cups:p.cups,pts:careerTotals().pts,w:careerTotals().w});
+  return {jt,hofYear:S.hof?S.year+3:null};
+}
+function firePostEvents(){
+  const ev=S.postEvents||[];const due=ev.filter(e=>e.year<=S.year&&!e.done);
+  due.forEach(e=>{e.done=true;
+    if(e.type==="jersey")queueMoment({lines:[[`Cérémonie d'avant-match · ${e.team}`,"sub"],[`LE N° ${e.num}`,"big"],["MONTE AU PLAFOND","huge"],[`${e.who} · plus jamais porté à ${e.team.split(" ")[0]}`,"sub"]],confetti:true});
+    if(e.type==="hof")queueMoment({sil:true,lines:[["Temple de la renommée du hockey","sub"],["INTRONISÉ","huge"],[e.who,"big"],[`Promotion ${e.year} · ${e.pos==="G"?e.w+" victoires":e.pts+" points"} · ${e.cups} Coupe${e.cups>1?"s":""}`,"sub"]],confetti:true});
+    const txt=e.type==="jersey"?`🏛️ ${e.team} retire le chandail n° ${e.num} de ${e.who}.`:`🏛️ ${e.who} est intronisé au Temple de la renommée.`;
+    S.leagueNews=S.leagueNews||[];S.leagueNews.push(txt);if(S.gm)gmLog(txt);
+  });
+}
+/* ---------- mode entraîneur-chef (partage le moteur DG) ---------- */
+function isCoach(){return !!(S.gm&&S.gm.mode==="coach");}
+function startCoach(teamId){
+  startGM(teamId);const g=S.gm;g.mode="coach";g.system="bal";g.trust="neutral";g.lines={f:[],d:[],g:null,pp:[]};g.speeches=0;
+  momentQueue=[];queueMoment({sil:true,lines:[["Nouveau chapitre","sub"],["ENTRAÎNEUR-CHEF","huge"],[`${logoImg("NHL",teamId,56)}<br>${nhlName(teamId)}`,"big"],["Derrière le banc : trios, système, gestion des hommes.","sub"]]});
+  S.coaches["NHL:"+teamId]={name:S.player.first+" "+S.player.last,style:"bal",trust:"neutral",since:S.year,me:true};
+  coachAutoLines();coachApply();g.log=[];gmLog(`Saison ${S.year}-${S.year+1}. Objectif : <b>${g.goal.txt}</b>. Tu diriges depuis le banc : le DG s'occupe des contrats.`);
+  renderGM();playMoments();
+}
+function coachAutoLines(){const g=S.gm,r=S.rosters[g.team];const F=r.map((x,i)=>({x,i})).filter(o=>o.x[1]!=="D"&&o.x[1]!=="G").sort((a,b)=>b.x[2]-a.x[2]);const D=r.map((x,i)=>({x,i})).filter(o=>o.x[1]==="D").sort((a,b)=>b.x[2]-a.x[2]);const G=r.map((x,i)=>({x,i})).filter(o=>o.x[1]==="G").sort((a,b)=>b.x[2]-a.x[2]);
+  g.lines={f:F.slice(0,3).map(o=>o.x[0]),d:D.slice(0,2).map(o=>o.x[0]),g:G[0]?G[0].x[0]:null,pp:[...F.slice(0,3),...D.slice(0,2)].map(o=>o.x[0])};}
+function coachLineScore(){
+  const g=S.gm,r=S.rosters[g.team];const by={};r.forEach(x=>by[x[0]]=x);const L=g.lines;
+  const F=r.filter(x=>x[1]!=="D"&&x[1]!=="G").sort((a,b)=>b[2]-a[2]);const D=r.filter(x=>x[1]==="D").sort((a,b)=>b[2]-a[2]);const G=r.filter(x=>x[1]==="G").sort((a,b)=>b[2]-a[2]);
+  const avg=a=>a.length?a.reduce((s,v)=>s+v,0)/a.length:0;
+  const fSel=L.f.map(n=>by[n]).filter(Boolean),dSel=L.d.map(n=>by[n]).filter(Boolean),gSel=by[L.g];
+  const fBest=avg(F.slice(0,3).map(x=>x[2])),dBest=avg(D.slice(0,2).map(x=>x[2])),gBest=G[0]?G[0][2]:70;
+  const fS=fSel.length===3?avg(fSel.map(x=>x[2])):fBest-6,dS=dSel.length===2?avg(dSel.map(x=>x[2])):dBest-6,gS=gSel?gSel[2]:gBest-8;
+  const ppSel=L.pp.map(n=>by[n]).filter(Boolean);const ppS=ppSel.length===5?avg(ppSel.map(x=>x[2])):fBest-6;
+  // écart vs optimal (négatif = tu sous-utilises tes meilleurs), mais les jeunes se développent
+  let d=(fS-fBest)*.25+(dS-dBest)*.15+(gS-gBest)*.3+(ppS-fBest)*.1;
+  return clamp(d,-6,1.5);
+}
+function coachApply(){const g=S.gm,se=S.season,me=se.teams[g.team];if(g.baseStr==null)g.baseStr=me.str;const sysB=g.system==="off"?1:g.system==="def"?.5:.8;me.str=g.baseStr+sysB+coachLineScore()+(g.morale||0);}
+function coachToggle(kind,name){
+  const g=S.gm,L=g.lines;const lim={f:3,d:2,pp:5}[kind];
+  if(kind==="g"){L.g=name;}else{const k=L[kind].indexOf(name);if(k>=0)L[kind].splice(k,1);else{if(L[kind].length>=lim)L[kind].shift();L[kind].push(name);}}
+  coachApply();renderGM();save();
+}
+function coachSetSystem(k){const g=S.gm;g.system=k;const c=S.coaches["NHL:"+g.team];if(c)c.style=k;coachApply();gmLog(`📋 Système : ${COACH_STYLES[k].n}.`);renderGM();save();}
+function coachSetTrust(k){const g=S.gm;g.trust=k;const c=S.coaches["NHL:"+g.team];if(c)c.trust=k;renderGM();save();}
+function coachSpeech(){const g=S.gm,se=S.season;if(se.gamesPlayed-(g.lastSpeech||-99)<10){toast("Trop tôt : un discours perd son effet s'il revient trop souvent.");return;}g.lastSpeech=se.gamesPlayed;g.speeches++;
+  showEvent({title:"🗣️ Discours au vestiaire",text:"Avant le match, tu fermes la porte du vestiaire. Quel ton ?",
+    choices:[{label:"Coup de gueule",sub:"60 % : +3 force pendant 10 matchs · 40 % : le vestiaire se braque",run:()=>{if(Math.random()<.6){g.morale=3;g.moraleUntil=se.gamesPlayed+10;gmLog("🗣️ Ton coup de gueule a réveillé l'équipe.");}else{g.morale=-2;g.moraleUntil=se.gamesPlayed+6;gmLog("🗣️ Le coup de gueule est mal passé.");}coachApply();renderGM();save();}},
+      {label:"Calme et confiance",sub:"+1.5 force pendant 10 matchs",run:()=>{g.morale=1.5;g.moraleUntil=se.gamesPlayed+10;gmLog("🗣️ Message calme : l'équipe joue libérée.");coachApply();renderGM();save();}},
+      {label:"Vidéo et tactique",sub:"+1 force, dure 20 matchs",run:()=>{g.morale=1;g.moraleUntil=se.gamesPlayed+20;gmLog("🗣️ Séance vidéo : les détails sont réglés.");coachApply();renderGM();save();}}]});}
+function coachEvent(){
+  const g=S.gm,se=S.season,gp=se.gamesPlayed;g.evCount=g.evCount||0;
+  if(gp<6||gp>se.gp-6||g.evCount>=3||Math.random()>.045)return false;
+  const r=S.rosters[g.team],me=se.teams[g.team];const after=()=>{coachApply();renderGM();save();};
+  const k=pick(["benched","rookie","goalie","media","veteran"]);g.evCount++;
+  if(k==="benched"){const star=r.filter(x=>x[2]>=80&&x[1]!=="G"&&!g.lines.f.includes(x[0])&&!g.lines.d.includes(x[0]));if(!star.length){g.evCount--;return false;}const x=pick(star);
+    showEvent({title:"😤 Temps de glace",text:`<b>${x[0]}</b> (${x[2]}) n'est pas sur ton premier trio ni l'avantage numérique. Il vient te voir, furieux.`,
+      choices:[{label:"Le remettre sur l'avantage numérique",sub:"Il se calme",run:()=>{if(g.lines.pp.length>=5)g.lines.pp.shift();g.lines.pp.push(x[0]);gmLog(`😤 ${x[0]} retrouve l'avantage numérique.`);after();}},
+        {label:"« Mérite ta place »",sub:"50 % : il répond sur la glace (+2) · 50 % : il demande un échange",run:()=>{if(Math.random()<.5){x[2]=Math.min(99,x[2]+2);gmLog(`😤 ${x[0]} répond sur la glace : +2.`);}else{g.morale=-2;g.moraleUntil=gp+8;gmLog(`😤 ${x[0]} demande un échange. Ambiance lourde.`);}after();}}]});return true;}
+  if(k==="rookie"){const kids=r.filter(x=>x[3]<=21&&x[1]!=="G");if(!kids.length){g.evCount--;return false;}const x=kids.sort((a,b)=>b[2]-a[2])[0];
+    showEvent({title:"🌱 La recrue pousse",text:`<b>${x[0]}</b> (${x[3]} ans, ${x[2]}) domine à l'entraînement. Tes vétérans grognent déjà.`,
+      choices:[{label:"Le monter sur le premier trio",sub:"Il progresse vite (+3 en fin de saison), petit risque court terme",run:()=>{if(g.lines.f.length>=3)g.lines.f.shift();g.lines.f.push(x[0]);g.devKid=x[0];gmLog(`🌱 ${x[0]} promu sur le premier trio.`);after();}},
+        {label:"Patience, il attendra son tour",sub:"Stabilité",run:()=>{gmLog(`🌱 ${x[0]} reste sur le 4e trio.`);after();}}]});return true;}
+  if(k==="goalie"){const G=r.filter(x=>x[1]==="G").sort((a,b)=>b[2]-a[2]);if(G.length<2){g.evCount--;return false;}const st=g.lines.g===G[0][0]?G[0]:G[1],bk=st===G[0]?G[1]:G[0];
+    showEvent({title:"🥅 Crise devant le filet",text:`<b>${st[0]}</b> a accordé 12 buts en 3 matchs. Les partisans réclament <b>${bk[0]}</b>.`,
+      choices:[{label:`Lancer ${bk[0]}`,sub:"Changement de partant",run:()=>{g.lines.g=bk[0];gmLog(`🥅 ${bk[0]} prend le filet.`);after();}},
+        {label:`Garder confiance en ${st[0]}`,sub:"60 % : il se ressaisit",run:()=>{if(Math.random()<.6){g.morale=1.5;g.moraleUntil=gp+8;gmLog(`🥅 ${st[0]} se ressaisit : ta confiance a payé.`);}else{g.morale=-1.5;g.moraleUntil=gp+8;gmLog(`🥅 ${st[0]} coule encore.`);}after();}}]});return true;}
+  if(k==="media"){const sorted=se.teams.slice().sort((a,b)=>(b.w*2+b.otl)-(a.w*2+a.otl));const rank=sorted.findIndex(t=>t.id===g.team)+1;
+    showEvent({title:"🎤 Point de presse",text:`L'équipe est ${rank}e. Un journaliste : « Votre système ${COACH_STYLES[g.system].n.toLowerCase()} est-il dépassé ? »`,
+      choices:[{label:"Défendre mon système",sub:"Confiance du proprio +2",run:()=>{g.rep=clamp(g.rep+2,0,100);gmLog("🎤 Tu défends ton système.");after();}},
+        {label:"Annoncer des ajustements",sub:"Changer de système maintenant",run:()=>{const nk=pick(Object.keys(COACH_STYLES).filter(x=>x!==g.system));coachSetSystem(nk);}}]});return true;}
+  if(k==="veteran"){const vets=r.filter(x=>x[3]>=33);if(!vets.length){g.evCount--;return false;}const x=pick(vets);
+    showEvent({title:"🧓 Le vétéran",text:`<b>${x[0]}</b> (${x[3]} ans) ralentit. Il veut jouer, mais les chiffres disent le contraire.`,
+      choices:[{label:"Réduire son rôle avec respect",sub:"Il devient mentor : les jeunes progressent",run:()=>{r.filter(y=>y[3]<=22).forEach(y=>y[2]=Math.min(99,y[2]+1));gmLog(`🧓 ${x[0]} accepte un rôle de mentor.`);after();}},
+        {label:"Le laisser jouer",sub:"Loyauté, −force",run:()=>{g.morale=-1;g.moraleUntil=gp+15;gmLog(`🧓 ${x[0]} garde sa place.`);after();}}]});return true;}
+  return false;
+}
+function coachEndSeason(rec){
+  const g=S.gm,r=S.rosters[g.team];
+  // développement des jeunes sur les premières unités
+  const young=r.filter(x=>x[3]<=23&&(g.lines.f.includes(x[0])||g.lines.d.includes(x[0])));young.forEach(x=>{x[2]=Math.min(99,x[2]+ri(1,2));if(x[4])x[4]=Math.max(x[4],x[2]);});
+  if(g.devKid){const x=r.find(y=>y[0]===g.devKid);if(x)x[2]=Math.min(99,x[2]+1);g.devKid=null;}
+  if(young.length)gmLog(`🌱 Tes jeunes des premières unités ont progressé : ${young.map(x=>x[0]).join(", ")}.`);
+  // Jack Adams : gros bond au classement ou surprise
+  const prev=g.seasons.length>=2?g.seasons[g.seasons.length-2].rank:null;
+  if((prev&&prev-rec.rank>=10)||(rec.rank<=3&&rosterStrength(r)<80)){g.adams=(g.adams||0)+1;queueMoment({lines:[["Trophée Jack-Adams","sub"],["ENTRAÎNEUR DE L'ANNÉE","huge"],[S.player.first+" "+S.player.last,"big"]],confetti:true});gmLog("🏆 Trophée Jack-Adams : entraîneur de l'année !");}
+  g.morale=0;g.baseStr=null;
+}
+function renderCoachLines(){
+  const box=$("gmLines");if(!box)return;const g=S.gm,r=S.rosters[g.team],L=g.lines;
+  const row=(x,kind,on)=>`<div class="gmrow ${on?"sel":""}"><span class="nm">${x[0]}<small>${x[1]} · ${x[3]} ans${x[3]<=23?" · jeune":""}</small></span><span class="ov" style="background:${ovrColor(x[2],"NHL")}">${x[2]}</span><button onclick="coachToggle('${kind}','${x[0].replace(/'/g,"\\'")}')" style="${on?"background:var(--gold);color:#000;border-color:var(--gold)":""}">${on?"✓":"+"}</button></div>`;
+  const F=r.filter(x=>x[1]!=="D"&&x[1]!=="G").sort((a,b)=>b[2]-a[2]),D=r.filter(x=>x[1]==="D").sort((a,b)=>b[2]-a[2]),G=r.filter(x=>x[1]==="G").sort((a,b)=>b[2]-a[2]);
+  const sc=coachLineScore();
+  let h=`<p class="muted" style="margin-bottom:8px">Effet de tes choix sur la force de l'équipe : <b style="color:${sc>=0?"var(--green)":"var(--red)"}">${sc>=0?"+":""}${sc.toFixed(1)}</b>. Les meilleurs joueurs sur les premières unités maximisent la force ; des jeunes y progressent (+1 à +2 par saison).</p>`;
+  h+=`<div class="grp">Système</div><div class="filters">${Object.keys(COACH_STYLES).map(k=>`<button class="${g.system===k?"on":""}" onclick="coachSetSystem('${k}')">${COACH_STYLES[k].n}</button>`).join("")}</div>`;
+  h+=`<div class="grp">Philosophie</div><div class="filters">${[["youth","Jeunes d'abord"],["neutral","Au mérite"],["vets","Vétérans"]].map(([k,n])=>`<button class="${g.trust===k?"on":""}" onclick="coachSetTrust('${k}')">${n}</button>`).join("")}</div>`;
+  h+=`<div class="btns" style="margin:8px 0"><button class="blue" onclick="coachSpeech()">🗣️ Discours au vestiaire</button><button onclick="coachAutoLines();coachApply();renderGM();save();">Lignes automatiques</button></div>`;
+  h+=`<div class="grp">Premier trio (${L.f.length}/3)</div>`+F.map(x=>row(x,"f",L.f.includes(x[0]))).join("");
+  h+=`<div class="grp">Première paire (${L.d.length}/2)</div>`+D.map(x=>row(x,"d",L.d.includes(x[0]))).join("");
+  h+=`<div class="grp">Gardien partant</div>`+G.map(x=>row(x,"g",L.g===x[0])).join("");
+  h+=`<div class="grp">Avantage numérique (${L.pp.length}/5)</div>`+[...F,...D].slice(0,14).map(x=>row(x,"pp",L.pp.includes(x[0]))).join("");
+  box.innerHTML=h;
+}
+/* ---------- carrière héritée ---------- */
+function heirCandidates(){const L=S.life;if(!L||!L.kids)return [];return L.kids.filter(k=>S.year-k.born>=3);}
+function startHeir(kid){
+  const old=S;const p=old.player;
+  S.legacyPlayers=S.legacyPlayers||[];
+  S.legacyPlayers.push({name:p.first+" "+p.last,pos:p.pos,years:`${old.history[0].year}-${old.year}`,pts:careerTotals().pts,w:careerTotals().w,cups:p.cups,hof:!!old.hof});
+  planPostCareer();
+  // la ligue avance jusqu'aux 16 ans de l'enfant
+  let guard=0;S.leagueNews=S.leagueNews||[];
+  while(S.year-kid.born<16&&guard<16){guard++;S.year++;evolveLeague();checkExpansion(S.leagueNews);firePostEvents();}
+  const names=attrsFor(p.pos);const idx=p.attrs.map((v,i)=>({v,i})).sort((a,b)=>b.v-a.v).slice(0,2).map(o=>o.i);
+  const parentHist=old.history.map(h=>({age:h.age,level:h.level,pts:h.pts,w:h.w,g:h.g}));
+  S.ngCarry={year:S.year,rosters:S.rosters,ahlRosters:S.ahlRosters,jrAll:S.jrAll,leagueHistory:S.leagueHistory,recordBook:S.recordBook,legacyPlayers:S.legacyPlayers,faPool:null,gen:(old.ngCarry?old.ngCarry.gen:1)+1,expansionsDone:S.expansionsDone||[],coaches:S.coaches||{},relocations:S.relocations||[],postEvents:S.postEvents||[],
+    heir:{first:kid.name,last:p.last,nat:p.nat,parent:p.first+" "+p.last,parentPos:p.pos,bonusIdx:idx,bonusNames:idx.map(i=>names[i]),girl:!!kid.girl,parentHist,parentHof:!!old.hof,parentCups:p.cups,parentNum:p.num||97}};
+  save();initCreate();show("scrCreate");const hb=$("heirBanner");if(hb){hb.style.display="block";hb.innerHTML=`👨‍👧 Carrière héritée : <b>${kid.name} ${p.last}</b>, ${kid.girl?"fille":"fils"} de ${p.first} ${p.last}. +3 dans tes deux meilleurs attributs (${idx.map(i=>names[i]).join(", ")}) si même position, potentiel +3.`;}
+  $("inFirst").value=kid.name;$("inLast").value=p.last;if($("inNat"))$("inNat").value=p.nat;
+  toast(`${kid.name} ${p.last} a 16 ans : la ligue a avancé jusqu'en ${S.year}.`);
+}
+function heirInfoHtml(){const h=S.heir;if(!h)return "";return `<div class="news" style="border-color:var(--gold)">👨‍👧 ${h.girl?"Fille":"Fils"} de <b>${h.parent}</b>${h.parentHof?" (Temple de la renommée)":""}. Héritage : +3 en ${h.bonusNames.join(" et ")}, potentiel +3. Les médias compareront chaque saison.</div>`;}
+function heirSeasonNews(){
+  const h=S.heir;if(!h)return;const p=S.player,st=S.season.stats;const same=h.parentHist.filter(x=>x.age===p.age-0);
+  const ref=h.parentHist.find(x=>x.age===p.age);if(!ref)return;
+  const mine=p.pos==="G"?st.w:st.pts,his=ref.pts||ref.w||0;const u=p.pos==="G"?"victoires":"points";
+  laterNews(`👨‍👧 À ${p.age} ans, ${h.parent} avait <b>${his} ${u}</b> (${ref.level}). Toi : <b>${mine}</b> (${S.season.level}). ${mine>his?"Les médias parlent déjà de « la relève qui dépasse le modèle ».":"« Le nom est lourd à porter », écrit un chroniqueur."}`);
+  if(mine>his&&S.season.level==="NHL"&&ref.level==="NHL"&&!h.passedOnce){h.passedOnce=true;addPop(5,"meilleur que le parent");}
+}
+/* ================== STYLE DE JEU · RIVAL DE GÉNÉRATION · SÉRIES ================== */
+const STYLES={bal:{n:"Équilibré",d:"Ton jeu habituel.",g:"Classique"},off:{n:"Offensif",d:"+12 % de production, −défense, +/- en baisse.",g:"Agressif"},phys:{n:"Physique",d:"Mises en échec ×1.6, punitions, intimidation (+équipe), −5 % production, blessures +.",g:"—"},safe:{n:"Prudent",d:"−12 % production, +/- en hausse, blocs, blessures −.",g:"Profond"}};
+const G_STYLES={bal:{n:"Classique",d:"Ton jeu habituel."},agg:{n:"Agressif",d:"Sort loin de son filet : plus d'arrêts spectaculaires, plus de buts bizarres (variance +)."},deep:{n:"Profond",d:"Reste dans son filet : constance, moins d'éclat (variance −)."}};
+function styleOf(){const se=S.season;if(!se)return "bal";const k=se.style||"bal";return k;}
+function setStyle(k){const se=S.season;if(!se)return;se.style=k;se.styleGames=0;renderSeason();save();toast((S.player.pos==="G"?G_STYLES[k]:STYLES[k]).n+" — appliqué dès le prochain match");}
+function renderStyleBar(){
+  const box=$("styleBar");if(!box)return;const p=S.player,se=S.season;const T=p.pos==="G"?G_STYLES:STYLES;const cur=styleOf();
+  const opp=se.done?null:nextOpponent();let hint="";
+  if(opp&&p.pos!=="G"){const d=opp.str-se.teams[S.team.id].str;hint=d>4?"Adversaire plus fort : <b>prudent</b> limite les dégâts.":d<-4?"Adversaire plus faible : <b>offensif</b> pour gonfler tes stats.":Math.random()<.5?"Match serré : <b>physique</b> peut faire basculer le momentum.":"Match équilibré.";}
+  box.innerHTML=`<div class="filters" style="margin:0 0 4px">${Object.keys(T).map(k=>`<button class="${cur===k?"on":""}" onclick="setStyle('${k}')">${T[k].n}</button>`).join("")}</div><p class="muted" style="font-size:11px;margin:0">${T[cur].d}${hint?" · "+hint:""}</p>`;
+}
+/* libellé de période (prolongations multiples) */
+function perLabel(per,short){if(per<=3)return short?"P"+per:per+(per===1?"re":"e")+" période";const n=per-3;return short?(n===1?"P":n+"P"):(n===1?"Prolongation":n+"e prolongation");}
+/* --- rival de génération --- */
+function genRivalInit(){
+  const p=S.player;if(S.genRival||S.level!=="NHL")return;const ovr=overall(p);const myName=p.first+" "+p.last;
+  const grp=p.pos==="G"?x=>x[1]==="G":p.pos==="D"?x=>x[1]==="D":x=>x[1]!=="D"&&x[1]!=="G";
+  const cands=[];S.rosters.forEach((r,ti)=>{if(ti===S.team.id)return;r.forEach(x=>{if(grp(x)&&x[0]!==myName&&Math.abs((x[3]||27)-p.age)<=1)cands.push({x,ti,d:Math.abs(x[2]-(ovr+2))});});});
+  if(!cands.length)return;const realSet=new Set();ROSTERS.forEach(r=>r.forEach(x=>realSet.add(x[0])));const real=cands.filter(c=>realSet.has(c.x[0]));const pool=real.length?real:cands;pool.sort((a,b)=>a.d-b.d);const c=pick(pool.slice(0,4));
+  S.genRival={name:c.x[0],pos:c.x[1],age:c.x[3],hist:[],meBetter:0,himBetter:0,since:S.year,retired:null,awards:0,hisTot:0,myTot:0,passed:false};
+  if(!p.rival)p.rival={name:c.x[0],team:NHL[c.ti][0],myWins:0,hisWins:0};
+  S.leagueNews=S.leagueNews||[];S.leagueNews.push(`⚡ Les médias t'opposent déjà à <b>${c.x[0]}</b> (${NHL[c.ti][0]}, ${c.x[3]} ans) : « le duel de votre génération ». Vos carrières seront comparées toute votre vie.`);
+}
+function genRivalTeam(){const g=S.genRival;if(!g||g.retired)return -1;for(let i=0;i<S.rosters.length;i++)if(S.rosters[i].some(x=>x[0]===g.name))return i;return -1;}
+function genRivalSeason(hist){
+  const g=S.genRival,p=S.player,se=S.season,st=se.stats;if(!g)return;
+  const ti=genRivalTeam();
+  if(ti<0){if(!g.retired){g.retired=S.year;laterNews(`⚡ <b>${g.name}</b> prend sa retraite. Le duel de votre génération se termine : ${g.meBetter} saisons à ton avantage, ${g.himBetter} au sien.`);}return;}
+  const x=S.rosters[ti].find(y=>y[0]===g.name);
+  const L=(se.leaders||[]).find(l=>l.name===g.name);
+  let his;if(p.pos==="G"){const gl=(se.gLeaders||[]).find(l=>l.name===g.name);his=gl?gl.w:Math.round(clamp((x[2]-70)*2+22,8,48)+gauss(0,4));}
+  else his=L?L.pts:Math.round(clamp((x[2]-70)*2.6+45,10,130)*(x[1]==="D"?.62:1)+gauss(0,6));
+  his=Math.max(0,his);const mine=p.pos==="G"?st.w:st.pts;const meNHL=se.level==="NHL";
+  const hart=hist&&hist.hart===g.name;if(hart)g.awards++;
+  g.hist.push({year:S.year,his,mine:meNHL?mine:0,team:NHL[ti][0],ovr:x[2],hart,myLevel:se.level});
+  g.hisTot+=his;if(meNHL)g.myTot+=mine;
+  if(meNHL){if(mine>his)g.meBetter++;else if(his>mine)g.himBetter++;}
+  if(p.rival&&p.rival.name===g.name)p.rival.team=NHL[ti][0];
+  if(!g.passed&&g.myTot>g.hisTot&&g.hist.length>=3){g.passed=true;queueMoment({sil:true,lines:[["Duel de génération","sub"],["TU DÉPASSES","big"],[g.name.toUpperCase(),"huge"],[`${g.myTot} ${p.pos==="G"?"victoires":"points"} contre ${g.hisTot} depuis ${g.since}`,"sub"]]});}
+  if(g.passed&&g.hisTot>g.myTot+15)g.passed=false;
+}
+function renderGenRival(){
+  const box=$("rivalView");if(!box)return;const g=S.genRival,p=S.player;
+  if(!g){box.innerHTML="<p class='muted'>Dès ton arrivée dans la LNH, un joueur de ton âge deviendra ton rival de toute une carrière.</p>";return;}
+  const ti=genRivalTeam();const u=p.pos==="G"?"V":"PTS";
+  let h=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">${ti>=0?logoImg("NHL",ti,40):""}<div><b>${g.name}</b> <span class="muted">· ${g.pos} · ${g.retired?"retraité en "+g.retired:(S.rosters[ti]&&(S.rosters[ti].find(x=>x[0]===g.name)||[])[2])+" · "+NHL[ti][0]}</span><br><span class="muted" style="font-size:11px">Rivaux depuis ${g.since}${g.awards?" · "+g.awards+" Hart":""}</span></div></div>`;
+  h+=`<div class="stat-grid"><div class="stat"><b>${g.myTot}</b><small>Toi (${u})</small></div><div class="stat"><b>${g.hisTot}</b><small>Lui (${u})</small></div><div class="stat"><b>${g.meBetter}-${g.himBetter}</b><small>Saisons gagnées</small></div></div>`;
+  if(g.hist.length)h+=`<div style="overflow:auto;margin-top:8px"><table><tr><th>Saison</th><th class="num">Toi</th><th class="num">Lui</th><th>Équipe</th></tr>${g.hist.slice().reverse().slice(0,12).map(r=>`<tr><td>${r.year}-${(r.year+1).toString().slice(2)}</td><td class="num" style="${r.mine>r.his?"color:var(--gold);font-weight:700":""}">${r.myLevel==="NHL"?r.mine:"<span class='muted'>"+r.myLevel+"</span>"}</td><td class="num" style="${r.his>r.mine?"color:var(--gold);font-weight:700":""}">${r.his}${r.hart?" 🏆":""}</td><td class="muted">${r.team}</td></tr>`).join("")}</table></div>`;
+  box.innerHTML=h;
+}
+/* ================== RELATIONS · VIE HORS GLACE · MÉDIAS ================== */
+function lifeOf(){S.life=S.life||{pop:50,spouse:null,kids:[],sponsors:[],nicks:[],popLog:[]};if(S.life.pop==null)S.life.pop=50;return S.life;}
+function relOf(){S.rel=S.rel||{mates:[],mentor:null};return S.rel;}
+function addPop(n,why){const L=lifeOf();if(n>0&&L.pop>=80)n=Math.ceil(n/2);if(n<0&&L.pop<=20)n=Math.ceil(n/2);L.pop=clamp(Math.round(L.pop+n),0,100);if(why){L.popLog.unshift(`${n>0?"+":""}${n} · ${why}`);if(L.popLog.length>12)L.popLog.pop();}}
+function popLabel(v){return v>=85?"adulé":v>=70?"adoré":v>=55?"apprécié":v>=40?"neutre":v>=25?"critiqué":"hué";}
+function chemLabel(c){return c>=80?"télépathie":c>=65?"excellente":c>=45?"correcte":c>=30?"froide":"conflit";}
+/* compagnons de trio / partenaire / auxiliaire : choisis au début de saison selon mon rôle */
+function relNewSeason(){
+  const p=S.player,se=S.season,R=relOf();const roster=rosterOf(se.level,S.team.id);const myName=p.first+" "+p.last;
+  const old={};R.mates.forEach(m=>old[m.name]=m.chem);
+  let cands=[];
+  if(p.pos==="G")cands=roster.filter(x=>x[1]==="G").sort((a,b)=>b[2]-a[2]).slice(0,1);
+  else if(p.pos==="D"){const d=roster.filter(x=>x[1]==="D").sort((a,b)=>b[2]-a[2]);const k=se.role==="1re"?0:se.role==="2e"?2:se.role==="3e"?4:6;cands=d.slice(k,k+1).length?d.slice(k,k+1):d.slice(0,1);}
+  else{const f=roster.filter(x=>x[1]!=="D"&&x[1]!=="G").sort((a,b)=>b[2]-a[2]);const k=se.role==="1re"?0:se.role==="2e"?3:se.role==="3e"?6:9;cands=f.slice(k,k+2);if(cands.length<2)cands=f.slice(0,2);}
+  R.mates=cands.filter(x=>x[0]!==myName).map(x=>({name:x[0],pos:x[1],ovr:x[2],chem:old[x[0]]!=null?Math.min(100,old[x[0]]+5):clamp(Math.round(gauss(50,12)),20,80),since:old[x[0]]!=null?(R.mates.find(m=>m.name===x[0])||{}).since||S.year:S.year}));
+  // mentor : jeune joueur pro + vétéran de l'équipe
+  if(R.mentor&&!roster.some(x=>x[0]===R.mentor.name)){S.leagueNews=S.leagueNews||[];S.leagueNews.push(`🧓 Ton mentor <b>${R.mentor.name}</b> n'est plus dans l'équipe. Tu voles de tes propres ailes.`);R.mentorPast=R.mentorPast||[];R.mentorPast.push(R.mentor);R.mentor=null;}
+  if(!R.mentor&&p.age<=21&&se.level!=="JR"){const vets=roster.filter(x=>x[3]>=30&&(p.pos==="G"?x[1]==="G":p.pos==="D"?x[1]==="D":x[1]!=="D"&&x[1]!=="G")).sort((a,b)=>b[2]-a[2]);if(vets.length){const v=vets[0];R.mentor={name:v[0],since:S.year,team:teamName(se.teams[S.team.id])};S.leagueNews=S.leagueNews||[];S.leagueNews.push(`🧓 Le vétéran <b>${v[0]}</b> (${v[3]} ans) te prend sous son aile. Un mentor, ça change une carrière.`);}}
+}
+/* multiplicateur de production lié à la chimie et à la popularité */
+function relMult(){const R=relOf();if(!R.mates.length)return 1;const avg=R.mates.reduce((s,m)=>s+m.chem,0)/R.mates.length;return 1+(avg-50)/450+(lifeOf().pop-50)/1200;}
+function relAfterGame(res,won){
+  const R=relOf();if(!res.my)return;const pt=res.my.goalie?res.my.ga<=2:(res.my.g+res.my.a)>0;
+  R.mates.forEach(m=>{let d=(won?.35:-.3)+(pt?.45:-.3)+gauss(0,.5)+(62-m.chem)*.025;m.chem=clamp(+(m.chem+d).toFixed(1),0,100);});
+}
+/* entrevue d'après-match */
+function mediaAfterGame(res,won,opp){
+  const se=S.season,p=S.player,L=lifeOf();if(se.event||!res.my||se.gamesPlayed<3||se.level==="JR"&&Math.random()<.5)return;
+  const myName=p.first+" "+p.last;const star=res.stars&&res.stars[0]===myName;const big=!res.my.goalie?res.my.g>=3||res.my.g+res.my.a>=4:res.my.ga===0;
+  const bad=!won&&se.teamStreak<=-4;
+  if(!((star&&Math.random()<.18)||(big&&Math.random()<.5)||(bad&&Math.random()<.15)))return;
+  se.interviews=(se.interviews||0)+1;if(se.interviews>4)return;
+  const q=bad?pick([`« ${-se.teamStreak} défaites de suite. C'est quoi le problème dans ce vestiaire ? »`,`« Les partisans huent. Vous les comprenez ? »`,`« Est-ce que le coach a encore le contrôle ? »`]):pick([`« ${big?"Quel match !":"Première étoile ce soir."} C'est ta meilleure saison ? »`,`« ${opp.city} n'a rien pu faire contre toi. Tu te sens invincible ? »`,`« On parle déjà de toi pour les trophées. Tu y penses ? »`]);
+  showEvent({title:"🎤 Entrevue d'après-match",text:`Micro tendu devant ton casier. ${q}`,
+    choices:[
+      {label:"Humble",sub:"« C'est l'équipe. » · vestiaire +, popularité +",run:()=>{addPop(2,"entrevue humble");relOf().mates.forEach(m=>m.chem=clamp(m.chem+3,0,100));addNews("🎤 Réponse humble en entrevue. Le vestiaire apprécie.");}},
+      {label:"Confiant",sub:"« Oui, et ce n'est pas fini. » · popularité ++, pression",run:()=>{if(Math.random()<.7){addPop(5,"déclaration confiante");se.form=1.06;se.formUntil=se.gamesPlayed+6;addNews("🎤 Ta confiance fait les manchettes. Les partisans adorent.");}else{addPop(-4,"déclaration mal reçue");addNews("🎤 Ta déclaration est jugée arrogante. Ça grince.");}}},
+      {label:bad?"Pointer du doigt":"Provoquer",sub:bad?"Tu blâmes les autres · risqué":"Tu nargues l'adversaire · les partisans adverses te détestent",run:()=>{if(bad){relOf().mates.forEach(m=>m.chem=clamp(m.chem-10,0,100));addPop(Math.random()<.5?6:-8,"sortie publique");addNews("🎤 Ta sortie publique divise le vestiaire.");}else{addPop(4,"provocation");se.heel=(se.heel||0)+1;if(p.rival&&Math.random()<.5){p.rival.heat=(p.rival.heat||0)+1;}addNews(`🎤 Tu nargues ${opp.city}. Leur aréna t'attendra.`);}}}]});
+}
+/* surnoms gagnés */
+const NICKS=[["g50",p=>S.season.stats.g>=50,"La Gâchette"],["pts100",p=>S.season.stats.pts>=100,"Le Magicien"],["so8",p=>p.pos==="G"&&S.season.stats.so>=8,"Le Mur"],["hits",p=>(S.season.stats.hits||0)>=250,"Le Bulldozer"],["hart",p=>p.awards.some(a=>a.a==="hart"),"Le Patron"],["cups3",p=>p.cups>=3,"Monsieur Coupe"],["smythe",p=>p.awards.some(a=>a.a==="smythe"),"L'Homme des séries"],["cap",p=>p.captain==="C"&&(S.tenure||0)>=4,"Le Général"],["pop",p=>lifeOf().pop>=90,"L'Idole"]];
+function checkNicks(){const p=S.player,L=lifeOf();NICKS.forEach(([k,f,n])=>{if(L.nicks.some(x=>x.k===k))return;try{if(f(p)){L.nicks.push({k,n,year:S.year});if(!p.nick)p.nick=n;laterNews(`🏷️ Les partisans t'ont trouvé un surnom : <b>« ${n} »</b>.`);}}catch(e){}});}
+function setNick(n){S.player.nick=n;renderPlayer();renderSeason();save();}
+/* fin de saison : mentor, protégés, popularité, commandites */
+function relEndSeason(){
+  const p=S.player,R=relOf(),L=lifeOf(),se=S.season,st=se.stats;  if(R.mentor&&se.level!=="JR"){givePts(1,"mentor "+R.mentor.name);laterNews(`🧓 Une autre année auprès de <b>${R.mentor.name}</b> : +1 point d'entraînement.`);if(p.age>=22){laterNews(`🧓 ${R.mentor.name} te dit : « T'as plus besoin de moi. » Fin du mentorat.`);R.mentorPast=R.mentorPast||[];R.mentorPast.push(R.mentor);R.mentor=null;}}
+  // protégés : progressent tant qu'ils sont avec moi
+  (S.mentored||[]).forEach(m=>{const r=rosterOf(se.level,S.team.id);const x=r.find(y=>y[0]===m.name);if(x){x[2]=Math.min(99,x[2]+1);m.ovr=x[2];m.years=(m.years||1)+1;}});
+  // popularité saisonnière
+  const gp=st.gp||1;const prod=p.pos==="G"?st.w/gp:st.pts/gp;
+  let d=0;if(se.playoffs&&se.playoffs.won)d+=12;else if(se.playoffs&&se.playoffs.qualified)d+=2;else d-=3;
+  if(p.pos!=="G"){if(prod>=1)d+=6;else if(prod>=.6)d+=2;else if(prod<.3&&se.level==="NHL")d-=5;}else{if(prod>=.5)d+=5;else if(prod<.35)d-=4;}
+  d-=Math.round((L.pop-55)*.2); // retour vers la moyenne
+  addPop(d,"saison "+S.year);
+  // commandites : expiration et pertes
+  L.sponsors=L.sponsors.filter(s=>{if(s.until<=S.year){laterNews(`💼 Fin de l'entente avec <b>${s.brand}</b>.`);return false;}if(L.pop<30&&Math.random()<.5){laterNews(`💼 <b>${s.brand}</b> rompt ton contrat : ton image est devenue un risque.`);return false;}return true;});
+  // enfants qui grandissent / famille
+  if(L.spouse&&L.kids.length&&Math.random()<.3){const k=pick(L.kids);const age=S.year-k.born;if(age>=5&&age<=12)laterNews(`👨‍👧 ${k.name} (${age} ans) a marqué son premier but au hockey mineur. Tu étais dans les gradins.`);}
+  checkNicks();
+}
+function sponsorIncome(){return lifeOf().sponsors.reduce((s,x)=>s+x.yearly,0);}
+const BRANDS=[["Bâtons Vortex","bâton",1],["Patins Northline","patins",1],["Céréales Flocons d'Or","céréales",1.2],["Boissons Hydra","boisson énergisante",.9],["Autos Boréal","voiture",1.6],["Montres Kessler","montres",2],["Pizzeria Chez Gino","restaurant local",.4],["Jeux Icebreaker","jeu vidéo",1.4],["Banque du Nord","banque",1.8],["Vêtements Tundra","vêtements",1.1]];
+function lifeEvent(k,gp){
+  const se=S.season,p=S.player,L=lifeOf();
+  if(k==="proposal"){const sp=genName(pick([p.nat,p.nat,"Canada"])).split(" ")[0];const names={Canada:["Camille","Léa","Sarah","Emma","Rosalie","Juliette"],"États-Unis":["Emily","Ashley","Megan","Hannah"],Suède:["Elin","Sofia","Linnea"],Finlande:["Aino","Emma","Sofia"],Russie:["Anastasia","Daria","Polina"],Tchéquie:["Tereza","Eliška"],Suisse:["Lara","Noemi"],Slovaquie:["Natália","Kristína"],Allemagne:["Lena","Hannah"]};const nm=pick(names[p.nat]||names.Canada);
+    showEvent({title:"💍 Grande question",text:`Ça fait trois ans que <b>${nm}</b> te suit de ville en ville. Tes coéquipiers te taquinent : « Pis, c'est pour quand ? »`,
+      choices:[{label:"Je fais la grande demande",sub:"Stabilité : +forme, mariage l'été prochain (150 k$)",run:()=>{L.spouse={name:nm,since:S.year};S.fin=S.fin||{gross:0,net:0,endorse:0,years:[],assets:[],charity:0,spent:0};S.fin.spent=(S.fin.spent||0)+150000;se.form=1.06;se.formUntil=gp+15;addPop(3,"fiançailles");addNews(`💍 Tu es fiancé à <b>${nm}</b>. Le mariage aura lieu l'été prochain.`);}},
+        {label:"Pas tout de suite",sub:"Le hockey d'abord",run:()=>{addNews("💍 Tu repousses la grande question. Ça passe… pour cette fois.");L.proposalWait=(L.proposalWait||0)+1;}}]});return true;}
+  if(k==="baby"){const girl=Math.random()<.5;const nm=girl?pick(["Florence","Charlotte","Alice","Olivia","Léa","Mila","Zoé"]):pick(["Liam","Noah","Thomas","Léo","Félix","Nathan","Jacob"]);
+    showEvent({title:"👶 Naissance",text:`${L.spouse.name} accouche cette nuit : <b>${nm}</b>, ${girl?"une petite fille":"un petit garçon"} en pleine santé. Le match est demain soir.`,
+      choices:[{label:"Je reste à l'hôpital",sub:"Tu rates 2 matchs · popularité +",run:()=>{L.kids.push({name:nm,born:S.year,girl});se.injuryGames=Math.max(se.injuryGames,2);addPop(4,"naissance de "+nm);addNews(`👶 Naissance de <b>${nm}</b> ! Tu rates deux matchs pour rester avec ta famille.`);}},
+        {label:"Je joue demain soir",sub:"Tu marques pour le bébé ? +forme",run:()=>{L.kids.push({name:nm,born:S.year,girl});se.form=1.12;se.formUntil=gp+5;addNews(`👶 Naissance de <b>${nm}</b> ! Tu sautes sur la glace le lendemain, le cœur gros.`);}}]});return true;}
+  if(k==="sponsor"){const taken=L.sponsors.map(s=>s.brand);const av=BRANDS.filter(b=>!taken.includes(b[0]));if(!av.length)return false;const b=pick(av);const ovr=overall(p);
+    const yearly=Math.round(Math.max(1,(ovr-70))*45000*b[2]*(0.5+L.pop/100)*(BIG_MARKET.includes(S.team.id)?1.4:1)/10000)*10000;const yrs=ri(2,4);
+    const shady=b[2]>=1.6&&Math.random()<.35;
+    showEvent({title:"💼 Offre de commandite",text:`<b>${b[0]}</b> (${b[1]}) t'offre <b>${fmt$(yearly)}/an pendant ${yrs} ans</b> pour être leur visage.${shady?" Ton agent hésite : la compagnie a mauvaise presse ces temps-ci.":""}`,
+      choices:[{label:"J'accepte",sub:shady?"Gros chèque, risque d'image":"Revenu garanti",run:()=>{L.sponsors.push({brand:b[0],yearly,until:S.year+yrs,shady});addNews(`💼 Entente signée avec <b>${b[0]}</b> : ${fmt$(yearly)}/an.`);if(shady&&Math.random()<.5){addPop(-6,"commanditaire controversé");}}},
+        {label:"Je refuse",sub:"Image maîtrisée",run:()=>{addPop(1,"sélectif");addNews(`💼 Tu déclines ${b[0]}.`);}}]});return true;}
+  if(k==="controversy"){const sc=pick([`Une vidéo de toi dans un bar à 3 h du matin, la veille d'un match, circule sur les réseaux.`,`Un ancien coéquipier te traite de « joueur égoïste » dans un balado.`,`Tu as ignoré un jeune partisan qui voulait un autographe. La vidéo a 2 millions de vues.`,`Tu as « aimé » une publication qui critique ton propre entraîneur.`]);
+    showEvent({title:"📱 Controverse",text:sc,
+      choices:[{label:"M'excuser publiquement",sub:"Popularité −3, affaire close",run:()=>{addPop(-3,"excuses publiques");addNews("📱 Tes excuses calment le jeu.");}},
+        {label:"Ignorer",sub:"Popularité −8, mais 40 % : ça te motive",run:()=>{addPop(-8,"controverse ignorée");if(Math.random()<.4){se.form=1.1;se.formUntil=gp+8;addNews("📱 Tu ignores la tempête et joues avec rage.");}else addNews("📱 L'histoire traîne une semaine de plus.");}},
+        {label:"Répondre du tac au tac",sub:"Pile ou face : +6 ou −12",run:()=>{if(Math.random()<.5){addPop(6,"réplique appréciée");addNews("📱 Ta réplique devient virale. Les partisans sont de ton côté.");}else{addPop(-12,"réplique ratée");relOf().mates.forEach(m=>m.chem=clamp(m.chem-5,0,100));addNews("📱 Ta réplique empire tout.");}}}]});return true;}
+  if(k==="conflict"){const R=relOf();if(!R.mates.length)return false;const m=pick(R.mates);
+    showEvent({title:"💢 Friction",text:`<b>${m.name}</b> t'a lancé un regard noir après ton tir raté en avantage numérique. Dans le vestiaire, le ton monte.`,
+      choices:[{label:"Régler ça en privé",sub:"70 % : la chimie remonte",run:()=>{if(Math.random()<.7){m.chem=clamp(m.chem+10,0,100);addNews(`💢 Mise au point avec ${m.name}. Vous repartez à neuf.`);}else{m.chem=clamp(m.chem-15,0,100);addNews(`💢 La discussion avec ${m.name} tourne mal.`);}}},
+        {label:"Demander un changement de trio",sub:"Nouveau compagnon, chimie à rebâtir",run:()=>{const r=rosterOf(se.level,S.team.id).filter(x=>x[1]!=="G"&&!R.mates.some(mm=>mm.name===x[0])&&x[0]!==p.first+" "+p.last&&(p.pos==="D"?x[1]==="D":x[1]!=="D"));if(r.length){const nx=pick(r);R.mates[R.mates.indexOf(m)]={name:nx[0],pos:nx[1],ovr:nx[2],chem:45,since:S.year};addNews(`🔀 Le coach te jumelle avec ${nx[0]}.`);}else addNews("Le coach refuse de changer les trios.");}},
+        {label:"Laisser passer",sub:"Chimie −8",run:()=>{m.chem=clamp(m.chem-8,0,100);addNews(`💢 Froid persistant avec ${m.name}.`);}}]});return true;}
+  return false;
+}
+function renderRel(){
+  const box=$("relView");if(!box)return;const R=relOf(),L=lifeOf(),p=S.player;
+  let h=`<div class="togg" style="flex-direction:column;align-items:stretch;gap:4px"><span>Popularité : <b>${L.pop}</b> · partisans ${popLabel(L.pop)}</span><div class="capbar" style="margin:0"><i style="width:${L.pop}%;background:${L.pop>=55?"var(--green)":L.pop>=35?"var(--tacc)":"var(--red)"}"></i></div></div>`;
+  if(L.popLog.length)h+=`<p class="muted" style="font-size:11px;margin:4px 0 8px">${L.popLog.slice(0,3).join(" · ")}</p>`;
+  h+=`<div class="grp">${p.pos==="G"?"Tandem":p.pos==="D"?"Partenaire":"Compagnons de trio"}</div>`;
+  h+=R.mates.length?R.mates.map(m=>`<div class="togg" style="flex-direction:column;align-items:stretch;gap:4px"><span><b>${m.name}</b> <span class="muted">${m.pos} · ${m.ovr} · depuis ${m.since}</span> <span class="tag">${chemLabel(m.chem)}</span></span><div class="capbar" style="margin:0"><i style="width:${m.chem}%;background:${m.chem>=65?"var(--green)":m.chem>=45?"var(--tacc)":"var(--red)"}"></i></div></div>`).join(""):"<p class='muted'>Attribués au début de la saison.</p>";
+  h+=`<p class="muted" style="font-size:11px">Bonne chimie = plus de production. Elle monte avec les victoires et tes points.</p>`;
+  if(R.mentor)h+=`<div class="grp">Mentor</div><div class="news">🧓 <b>${R.mentor.name}</b> <span class="muted">· depuis ${R.mentor.since} · +1 point d'entraînement par saison</span></div>`;
+  if(R.mentorPast&&R.mentorPast.length)h+=`<p class="muted" style="font-size:11px">Anciens mentors : ${R.mentorPast.map(m=>m.name).join(", ")}</p>`;
+  const men=S.mentored||[];if(men.length)h+=`<div class="grp">Tes protégés</div>`+men.map(m=>`<div class="news">🌱 <b>${m.name}</b> <span class="muted">· depuis ${m.year}${m.ovr?" · cote "+m.ovr:""}</span></div>`).join("");
+  if(L.nicks.length)h+=`<div class="grp">Surnoms</div><div class="btns">`+L.nicks.map(n=>`<button onclick="setNick('${n.n.replace(/'/g,"\\'")}')" style="${p.nick===n.n?"background:var(--gold);color:#000;border-color:var(--gold)":""}">« ${n.n} »<small style="display:block;font-weight:400">${n.year}</small></button>`).join("")+`</div>`;
+  box.innerHTML=h;
+}
+function renderLife(){
+  const box=$("lifeView");if(!box)return;const L=lifeOf(),p=S.player;
+  let h="";
+  h+=`<div class="grp">Famille</div>`;
+  h+=L.spouse?`<div class="news">💍 ${L.spouse.married?"Marié à":"Fiancé à"} <b>${L.spouse.name}</b> <span class="muted">· depuis ${L.spouse.since}</span></div>`:`<p class="muted">Célibataire. La vie de joueur de hockey.</p>`;
+  if(L.kids.length)h+=L.kids.map(k=>`<div class="news">${k.girl?"👧":"👦"} <b>${k.name}</b> <span class="muted">· ${S.year-k.born} an${S.year-k.born>1?"s":""}</span></div>`).join("");
+  h+=`<div class="grp">Commandites</div>`;
+  h+=L.sponsors.length?L.sponsors.map(s=>`<div class="news">💼 <b>${s.brand}</b> · ${fmt$(s.yearly)}/an <span class="muted">· jusqu'en ${s.until}</span></div>`).join("")+`<p class="muted">Total : ${fmt$(sponsorIncome())}/an, en plus des commandites liées à ta cote.</p>`:`<p class="muted">Aucune entente. Les marques viendront avec la popularité (${L.pop}) et les performances.</p>`;
+  box.innerHTML=h;
+}
 function checkEvents(){
   const se=S.season,p=S.player,ovr=overall(p),gp=se.gamesPlayed;
   if(se.event||se.done)return;
@@ -1638,6 +2025,14 @@ function checkEvents(){
         {label:"Je préfère un A",sub:"Adjoint, moins de pression",run:()=>{p.captain="A";addNews("Tu es nommé <b>adjoint au capitaine</b>.");}}]});
     return;
   }
+  // --- vie hors glace / médias (canal séparé, max 2 / saison)
+  se.lifeCount=se.lifeCount||0;
+  if(gp>6&&gp<se.gp-6&&se.lifeCount<2&&Math.random()<.028){
+    const L=lifeOf();const lp=[];
+    if(lvl!=="JR"&&p.age>=24&&!L.spouse)lp.push("proposal","proposal",p.age>=26?"proposal":"conflict");if(L.spouse&&L.kids.length<3&&p.age<=36)lp.push("baby");
+    if(lvl==="NHL"&&(ovr>=75||L.pop>=60)&&L.sponsors.length<4)lp.push("sponsor","sponsor");if(lvl==="NHL")lp.push("controversy");if(relOf().mates.length)lp.push("conflict");
+    if(lp.length){se.lifeCount++;if(lifeEvent(pick(lp),gp))return;se.lifeCount--;}
+  }
   // --- événements aléatoires (max 3 / saison)
   if(gp>5&&gp<se.gp-5&&se.evCount<3&&Math.random()<.035){
     const pool=[];
@@ -1651,13 +2046,14 @@ function checkEvents(){
     if(lvl==="NHL"&&Math.random()<.5&&!(S.contract&&S.contract.ntc))pool.push("traded");
     if(lvl==="NHL"&&p.rival)pool.push("rivalGame");
     const k=pick(pool);se.evCount++;
+    if(["proposal","baby","sponsor","controversy","conflict"].includes(k)){if(!lifeEvent(k,gp))se.evCount--;return;}
     if((k==="charityEvent"&&lvl==="JR")||(k==="contractHoldout"&&!(S.contract&&S.contract.years>=2&&ovr>=84&&S.contract.salary<5e6))||(k==="captainTalk"&&p.captain!=="C")){se.evCount--;return;}
     if(k==="tradeReq")showEvent({title:"🔁 Temps de glace",text:`Ton agent pense que tu mérites un plus grand rôle qu'un ${se.role} ${p.pos==="G"?"gardien":"trio"}. Tu peux demander une transaction — ou prouver ta valeur ici.`,
       choices:[{label:"Demander une transaction",sub:"Nouvelle équipe, rôle garanti plus grand",run:()=>{
           const cands=NHL.map((t,i)=>i).filter(i=>i!==S.team.id);const nt=pick(cands);
           S.contract&&(S.contract.team=nt);S.team.id=nt;S.tenure=0;p.captain=null;
           se.role=p.pos==="G"?"tandem":p.pos==="D"?"2e":"2e";
-          addNews(`🔁 Échangé aux <b>${NHL[nt][0]} ${NHL[nt][1]}</b> à ta demande. Tu obtiens un rôle de ${se.role}.`);
+          addNews(`🔁 Échangé aux <b>${nhlName(nt)}</b> à ta demande. Tu obtiens un rôle de ${se.role}.`);
           const t=se.teams[nt];toast("🔁 Échangé aux "+t.city+" !");
         }},
         {label:"Je reste et je travaille",sub:"+forme 15 matchs",run:()=>{se.form=1.12;se.formUntil=gp+15;addNews("Tu décides de forcer la main du coach par tes performances.");}}]});
@@ -1667,7 +2063,7 @@ function checkEvents(){
           {label:"J'attends le marché",sub:"Risque / récompense",run:()=>{addNews("Tu refuses la prolongation et testeras le marché.");}}]});}
     else if(k==="chemistry"){const r=rosterOf(lvl,S.team.id).filter(x=>x[1]!=="G"&&x[1]!=="D");const mate=r.length?pick(r)[0]:"ton ailier";
       showEvent({title:"🔥 Chimie",text:pick([`Ça clique avec <b>${mate}</b> : vous vous trouvez les yeux fermés. Le coach vous garde ensemble.`,`<b>${mate}</b> et toi, c'est de la télépathie depuis deux semaines. Les médias ont déjà trouvé un nom à votre trio.`,`Après un match de 3 points chacun, <b>${mate}</b> te dit : « On ne se sépare plus. » Le coach est d'accord.`]),
-        choices:[{label:"On continue comme ça",sub:"+production 12 matchs",run:()=>{se.form=1.18;se.formUntil=gp+12;addNews(`🔥 Chimie avec ${mate} : série chaude en vue.`);}}]});}
+        choices:[{label:"On continue comme ça",sub:"+production 12 matchs",run:()=>{se.form=1.18;se.formUntil=gp+12;relOf().mates.forEach(m=>m.chem=clamp(m.chem+12,0,100));addNews(`🔥 Chimie avec ${mate} : série chaude en vue.`);}}]});}
     else if(k==="coach")showEvent({title:"🧠 Le coach te parle",text:pick([`Ton entraîneur veut que tu changes quelque chose dans ton jeu. Qu'est-ce que tu travailles ?`,`Séance vidéo individuelle : ${se.coach?se.coach.name:"le coach"} a encerclé trois séquences de toi. « On règle quoi en premier ? »`,`Le coach te garde après l'entraînement : « T'as du talent, mais il te manque un morceau. Lequel tu veux travailler ? »`]),
       choices:p.pos==="G"?[{label:"Positionnement",sub:"+1 Positionnement",run:()=>{p.attrs[1]=Math.min(99,p.attrs[1]+1);addNews("Travail sur le positionnement (+1).");}},{label:"Contrôle des rebonds",sub:"+1 Contrôle",run:()=>{p.attrs[3]=Math.min(99,p.attrs[3]+1);addNews("Travail sur les rebonds (+1).");}},{label:"Je choisis moi-même",sub:"+1 point à placer",run:()=>{givePts(1,"coach");}}]
         :[{label:"Mon jeu défensif",sub:"+1 Défense",run:()=>{p.attrs[5]=Math.min(99,p.attrs[5]+1);addNews("Travail défensif (+1 Défense).");}},{label:"Mon tir",sub:"+1 Tir",run:()=>{p.attrs[1]=Math.min(99,p.attrs[1]+1);addNews("Travail du tir (+1 Tir).");}},{label:"Je choisis moi-même",sub:"+1 point à placer",run:()=>{givePts(1,"coach");}},{label:"Je fais à ma tête",sub:"Risque : moins de temps de glace",run:()=>{if(Math.random()<.5){se.form=.85;se.formUntil=gp+10;addNews("Le coach te coupe du temps de glace pendant quelques matchs.");}else addNews("Le coach laisse tomber. Rien ne change.");}}]});
@@ -1711,8 +2107,8 @@ function checkEvents(){
         choices:[{label:"Discours de feu",sub:"L'équipe répond… ou pas",run:()=>{const me=se.teams[S.team.id];if(Math.random()<.6){me.str+=2;addNews("🅲 Ton discours a réveillé le vestiaire.");}else{addNews("🅲 Le discours est tombé à plat.");}}},
           {label:"Montrer l'exemple",sub:"+forme pour toi",run:()=>{se.form=1.1;se.formUntil=gp+8;addNews("🅲 Tu laisses ton jeu parler.");}}]});}
     else if(k==="traded"){const cands=NHL.map((t,i)=>i).filter(i=>i!==S.team.id);const nt=pick(cands);
-      showEvent({title:"🔁 Transaction",text:`Coup de théâtre : tu viens d'être échangé aux <b>${NHL[nt][0]} ${NHL[nt][1]}</b>. Tu pars demain matin.`,
-        choices:[{label:"Faire mes valises",run:()=>{S.contract&&(S.contract.team=nt);S.team.id=nt;S.tenure=0;p.captain=null;se.role=roleFromRoster(rosterOf(lvl,nt))||se.role;addNews(`🔁 Échangé aux <b>${NHL[nt][0]} ${NHL[nt][1]}</b>.`);toast("🔁 Échangé !");}}]});}
+      showEvent({title:"🔁 Transaction",text:`Coup de théâtre : tu viens d'être échangé aux <b>${nhlName(nt)}</b>. Tu pars demain matin.`,
+        choices:[{label:"Faire mes valises",run:()=>{S.contract&&(S.contract.team=nt);S.team.id=nt;S.tenure=0;p.captain=null;se.role=roleFromRoster(rosterOf(lvl,nt))||se.role;addNews(`🔁 Échangé aux <b>${nhlName(nt)}</b>.`);toast("🔁 Échangé !");}}]});}
   }
 }
 
@@ -1741,7 +2137,7 @@ function resolveTradeRequest(dest){
   if(Math.random()<prob&&cands.length){
     const nt=pick(cands);S.contract&&(S.contract.team=nt);S.team.id=nt;S.tenure=0;p.captain=null;
     se.role=roleFromRoster(rosterOf(se.level,nt))||se.role;se.form=1.06;se.formUntil=se.gamesPlayed+10;
-    addNews(`🔁 Transaction accordée : tu passes aux <b>${NHL[nt][0]} ${NHL[nt][1]}</b> (${se.role}).`);toast("🔁 Échangé à "+NHL[nt][0]+" !");SFX.cheer();
+    addNews(`🔁 Transaction accordée : tu passes aux <b>${nhlName(nt)}</b> (${se.role}).`);toast("🔁 Échangé à "+NHL[nt][0]+" !");SFX.cheer();
     queueMoment({sil:true,lines:[["Transaction","sub"],[`${logoImg("NHL",nt,56)}<br>${NHL[nt][0].toUpperCase()}`,"huge"],[NHL[nt][1],"big"],["Nouveau départ, nouveau vestiaire.","sub"]]});playMoments();
   }else{
     se.form=.92;se.formUntil=se.gamesPlayed+10;
@@ -1767,13 +2163,13 @@ function seriousInjury(line){
 /* date limite des transactions (LNH, ~68 % de la saison) */
 function tradeDeadline(){
   const se=S.season,p=S.player,me=se.teams[S.team.id];
-  if(se.pendingDeadlineTrade){se.pendingDeadlineTrade=false;const cands=NHL.map((t,i)=>i).filter(i=>i!==S.team.id);const nt=pick(cands);S.contract&&(S.contract.team=nt);S.team.id=nt;S.tenure=0;p.captain=null;se.role=roleFromRoster(rosterOf("NHL",nt))||se.role;addNews(`⏰ Le DG a finalement exaucé ta demande : échangé aux <b>${NHL[nt][0]} ${NHL[nt][1]}</b> à la date limite.`);toast("⏰ Échangé à "+NHL[nt][0]);return;}
+  if(se.pendingDeadlineTrade){se.pendingDeadlineTrade=false;const cands=NHL.map((t,i)=>i).filter(i=>i!==S.team.id);const nt=pick(cands);S.contract&&(S.contract.team=nt);S.team.id=nt;S.tenure=0;p.captain=null;se.role=roleFromRoster(rosterOf("NHL",nt))||se.role;addNews(`⏰ Le DG a finalement exaucé ta demande : échangé aux <b>${nhlName(nt)}</b> à la date limite.`);toast("⏰ Échangé à "+NHL[nt][0]);return;}
   const rank=se.teams.slice().sort((a,b)=>(b.w*2+b.otl)-(a.w*2+a.otl)).findIndex(t=>t.id===me.id)+1;
   const expiring=S.contract&&S.contract.years<=1;
   if(rank>=20&&expiring&&overall(p)>=76&&Math.random()<.6){
     const contenders=se.teams.filter(t=>t.id!==me.id).sort((a,b)=>(b.w*2+b.otl)-(a.w*2+a.otl)).slice(0,8);const nt=pick(contenders).id;
     showEvent({title:"⏰ Date limite des transactions",text:`Ton équipe est hors course et ton contrat finit cet été. ${NHL[nt][0]} veut t'acquérir comme joueur de location pour une course à la Coupe.`,
-      choices:[{label:"Accepter l'échange",sub:"Prétendant immédiat, mais tu repars à zéro là-bas",run:()=>{S.contract.team=nt;S.team.id=nt;S.tenure=0;p.captain=null;se.role=roleFromRoster(rosterOf("NHL",nt));addNews(`⏰ Échangé à la date limite aux <b>${NHL[nt][0]} ${NHL[nt][1]}</b>.`);toast("⏰ Échangé à "+NHL[nt][0]+" !");}},
+      choices:[{label:"Accepter l'échange",sub:"Prétendant immédiat, mais tu repars à zéro là-bas",run:()=>{S.contract.team=nt;S.team.id=nt;S.tenure=0;p.captain=null;se.role=roleFromRoster(rosterOf("NHL",nt));addNews(`⏰ Échangé à la date limite aux <b>${nhlName(nt)}</b>.`);toast("⏰ Échangé à "+NHL[nt][0]+" !");}},
         {label:"Refuser (clause)",sub:"Tu finis la saison ici",run:()=>{addNews("Tu as refusé l'échange grâce à ta clause de non-mouvement.");}}]});
     return;
   }
@@ -1803,14 +2199,14 @@ function checkArcs(){
     else{const dest=pick([["Kansas City","Scouts","#002F6C","#C8102E"],["Portland","Pioneers","#0B6E4F","#F5A623"],["Salt Lake","Blizzard","#1B263B","#8ECAE6"],["Hamilton","Steelhawks","#F2A900","#111111"]]);
       showEvent({title:"🏟️ Déménagement",text:`C'est officiel : les <b>${teamName(me)}</b> deviennent les <b>${dest[0]} ${dest[1]}</b> la saison prochaine. Nouvelle ville, nouvel aréna… même vestiaire.`,
         choices:[{label:"Suivre l'équipe",sub:"Tu gardes ton contrat et ton rôle",run:()=>{relocateTeam(S.team.id,dest);addNews(`🏟️ Déménagement confirmé : ${dest[0]} ${dest[1]}.`);}},
-          {label:"Demander une transaction",sub:"Nouvelle équipe choisie au hasard",run:()=>{relocateTeam(S.team.id,dest);const cands=NHL.map((t,i)=>i).filter(i=>i!==S.team.id);const nt=pick(cands);S.contract&&(S.contract.team=nt);S.team.id=nt;S.tenure=0;p.captain=null;addNews(`🏟️ Tu refuses de déménager : échangé aux <b>${NHL[nt][0]} ${NHL[nt][1]}</b>.`);toast("🔁 Échangé à "+NHL[nt][0]);}}]});}
+          {label:"Demander une transaction",sub:"Nouvelle équipe choisie au hasard",run:()=>{relocateTeam(S.team.id,dest);const cands=NHL.map((t,i)=>i).filter(i=>i!==S.team.id);const nt=pick(cands);S.contract&&(S.contract.team=nt);S.team.id=nt;S.tenure=0;p.captain=null;addNews(`🏟️ Tu refuses de déménager : échangé aux <b>${nhlName(nt)}</b>.`);toast("🔁 Échangé à "+NHL[nt][0]);}}]});}
     return true;}
   // 2) Retour à la maison (vétéran, équipe de la région de sa ligue junior)
   const home=p.jrLeague==="LHJMQ"?[14,19]:p.jrLeague==="OHL"?[26,19,2,9]:[3,10,28,31];
   const homeIds=home.filter(i=>NHL[i]);
   if(!S.arcs.home&&p.age>=31&&S.contract&&S.contract.years<=1&&!homeIds.includes(S.team.id)&&Math.random()<.5){
     const hid=pick(homeIds);S.arcs.home={done:true};
-    showEvent({title:"🏠 Retour à la maison",text:`Les <b>${NHL[hid][0]} ${NHL[hid][1]}</b>, l'équipe de ta région, veulent te ramener pour finir ta carrière devant les tiens. Contrat de 2 ans à ${fmt$(Math.round(salaryFor([p.first,p.pos,ovr,p.age])*.9/50000)*50000)}.`,
+    showEvent({title:"🏠 Retour à la maison",text:`Les <b>${nhlName(hid)}</b>, l'équipe de ta région, veulent te ramener pour finir ta carrière devant les tiens. Contrat de 2 ans à ${fmt$(Math.round(salaryFor([p.first,p.pos,ovr,p.age])*.9/50000)*50000)}.`,
       choices:[{label:"Rentrer à la maison",sub:"Transaction immédiate, accueil de héros",run:()=>{S.contract={team:hid,years:2,salary:Math.round(salaryFor([p.first,p.pos,ovr,p.age])*.9/50000)*50000,type:"retour"};S.team.id=hid;S.tenure=0;p.captain=null;se.form=1.1;se.formUntil=gpNow()+20;S.arcs.home.went=true;addNews(`🏠 Retour à la maison : ${NHL[hid][0]} !`);toast("🏠 "+NHL[hid][0]);}},
         {label:"Rester ici",run:()=>{addNews("🏠 Tu déclines le retour à la maison. Pour l'instant.");}}]});return true;}
   // 3) Saison d'adieu (annoncée en début de saison, 35+ ans)
@@ -1843,7 +2239,7 @@ function draftShow(m,box){
     i++;draftTimer=setTimeout(reveal,speed);
   };
   const afterRound=()=>{
-    if(d.drafted&&d.round>1){const id=d.teamId;$("draftMe").innerHTML=`<div class="line sub" style="animation-delay:0s">${d.round}e ronde · ${d.pick}e au total</div><div class="line" style="animation-delay:.3s">${logoImg("NHL",id,56)}<br>les <b>${NHL[id][0]} ${NHL[id][1]}</b> sélectionnent…</div><div class="line huge" style="animation-delay:1s">${p.first.toUpperCase()} ${p.last.toUpperCase()}</div>`;SFX.fanfare();}
+    if(d.drafted&&d.round>1){const id=d.teamId;$("draftMe").innerHTML=`<div class="line sub" style="animation-delay:0s">${d.round}e ronde · ${d.pick}e au total</div><div class="line" style="animation-delay:.3s">${logoImg("NHL",id,56)}<br>les <b>${nhlName(id)}</b> sélectionnent…</div><div class="line huge" style="animation-delay:1s">${p.first.toUpperCase()} ${p.last.toUpperCase()}</div>`;SFX.fanfare();}
     else if(!d.drafted){$("draftMe").innerHTML=`<div class="line" style="animation-delay:0s">Ton nom n'a pas été appelé.<br><span class="muted">Classé ${d.rank}e espoir.</span></div>`;}
     $("draftFast").style.display="none";$("draftDone").style.display="block";
   };
@@ -1895,7 +2291,7 @@ function startGM(teamId){
   S.rosters.forEach(r=>ensureContracts(r));
   S.team={level:"NHL",id:teamId};S.level="NHL";
   $("modal").classList.remove("on");$("moment").classList.remove("on");momentQueue=[];
-  queueMoment({sil:true,lines:[["Nouveau chapitre","sub"],["DIRECTEUR GÉNÉRAL","huge"],[`${logoImg("NHL",teamId,56)}<br>${NHL[teamId][0]} ${NHL[teamId][1]}`,"big"],["Bâtis l'équipe que tu aurais voulu avoir.","sub"]]});
+  queueMoment({sil:true,lines:[["Nouveau chapitre","sub"],["DIRECTEUR GÉNÉRAL","huge"],[`${logoImg("NHL",teamId,56)}<br>${nhlName(teamId)}`,"big"],["Bâtis l'équipe que tu aurais voulu avoir.","sub"]]});
   gmNewSeason();playMoments();
 }
 function gmNewSeason(){
@@ -1921,7 +2317,7 @@ function gmSim(n){
     se.gamesPlayed++;
     if(se.gamesPlayed>=se.gp)se.done=true;
     if(se.gamesPlayed===Math.round(se.gp*.68)&&!S.gm.deadlineDone){S.gm.deadlineDone=true;gmLog("⏰ Date limite des transactions : dernière chance d'échanger cette saison.");toast("⏰ Date limite des transactions");break;}
-    if(gmEvent())break;
+    if(isCoach()?coachEvent():gmEvent())break;
   }
   renderGM();save();
 }
@@ -1982,7 +2378,7 @@ function gmEndSeason(){
   const ok=g.goal.need==="cup"?po.won:g.goal.need==="conf"?(po.won||rounds>=3):g.goal.need==="po"?po.qualified:rank<=24;
   g.rep=clamp(g.rep+(ok?12:-14)+(po.won?15:0),0,100);
   if(g.capTarget){if(payroll(S.rosters[g.team])<=g.capTarget){g.rep=clamp(g.rep+5,0,100);}else{g.rep=clamp(g.rep-10,0,100);}g.capTarget=null;}
-  maybeChangeCoach("NHL",g.team,!po.qualified,null);
+  if(!isCoach())maybeChangeCoach("NHL",g.team,!po.qualified,null);
   const rec={year:S.year,team:teamName(me),w:me.w,l:me.l,otl:me.otl,rank,po:po.qualified?(po.won?"Coupe Stanley":rounds+" ronde(s)"):"ratées",goal:g.goal.txt,ok,rep:g.rep};
   g.seasons.push(rec);
   if(!po.won&&po.qualified&&rounds>=3)queueMoment({sil:false,lines:[[`${S.year}-${S.year+1}`,"sub"],["FINALE DE CONFÉRENCE","big"],[`${logoImg("NHL",g.team,56)}<br>${teamName(me)}`,"huge"],[rounds===4?"Défaite en finale de la Coupe Stanley.":"Éliminés en finale de conférence.","sub"]]});
@@ -1995,7 +2391,8 @@ function gmEndSeason(){
   runDraft(null);
   const ownedPre=(S.picks&&S.picks[g.team]||[]).filter(pk=>pk.y===S.year);
   const mySlots=(S.lastDraftPicks||[]).map((x,i)=>({x,i})).filter(o=>{const r=o.x.pick<=NHL.length?1:o.x.pick<=NHL.length*2?2:3;return r<=2&&ownedPre.some(pk=>pk.r===r&&pk.orig===o.x.teamId);}).map(o=>o.i);
-  if(mySlots.length&&OPT.gmDraft!==false&&!S.__autoDraft){gmDraftLive(mySlots,()=>gmAfterDraft(rec,po));return;}
+  if(isCoach())coachEndSeason(rec);
+  if(mySlots.length&&OPT.gmDraft!==false&&!S.__autoDraft&&!isCoach()){gmDraftLive(mySlots,()=>gmAfterDraft(rec,po));return;}
   if(S.__autoDraft&&mySlots.length){gmApplyDraftChoices(mySlots,mySlots.map(i=>i));}
   gmAfterDraft(rec,po);
 }
@@ -2034,7 +2431,7 @@ function gmAfterDraft(rec,po){
   Object.keys(S.picks||{}).forEach(k=>{const tid=+k;if(tid===g.team)return;(S.picks[k]||[]).filter(pk=>pk.y===S.year&&pk.orig===g.team).forEach(pk=>{const cand=(S.lastDraftPicks||[]).find(x=>x.teamId===g.team&&(x.pick<=NHL.length?1:x.pick<=NHL.length*2?2:3)===pk.r);if(cand){const src=S.ahlRosters[g.team];const i=src.findIndex(y=>y[0]===cand.name);if(i>=0)S.ahlRosters[tid].push(src.splice(i,1)[0]);}});});
   g.lastPicks=myPicks;
   g.fired=g.rep<=10;
-  if(g.fired)queueMoment({lines:[["Le propriétaire a tranché","sub"],["CONGÉDIÉ","huge"],[`${g.seasons.length} saison${g.seasons.length>1?"s":""} comme DG`,"sub"]]});
+  if(g.fired)queueMoment({lines:[["Le propriétaire a tranché","sub"],["CONGÉDIÉ","huge"],[`${g.seasons.length} saison${g.seasons.length>1?"s":""} comme ${isCoach()?"entraîneur-chef":"DG"}`,"sub"]]});
   renderGMEnd(rec,po,myPicks);show("scrGMEnd");save();playMoments();
 }
 function gmNextSeason(){
@@ -2055,7 +2452,8 @@ function gmNextSeason(){
   S.faPool=S.faPool.filter(x=>x[3]<36).sort((a,b)=>b[2]-a[2]).slice(0,40);
   // les équipes IA signent une partie des agents libres
   S.faPool=S.faPool.filter(x=>{if(x[2]>=74&&Math.random()<.6){const cands=S.rosters.map((rr,ti)=>({rr,ti})).filter(o=>o.ti!==g.team&&o.rr.length<20&&payroll(o.rr)+salaryFor(x)<CAP);if(cands.length){const o=pick(cands);x[5]=salaryFor(x);x[6]=ri(1,4);o.rr.push(x);return false;}}return true;});
-  gmNewSeason();
+  gmNewSeason();firePostEvents();
+  if(isCoach()){S.coaches["NHL:"+g.team]={name:S.player.first+" "+S.player.last,style:g.system,trust:g.trust,since:g.year0,me:true};coachAutoLines();g.baseStr=null;coachApply();}
   (S.leagueNews||[]).forEach(n=>gmLog(n));S.leagueNews=[];renderGM();save();playMoments();
 }
 /* --- actions DG --- */
@@ -2092,7 +2490,9 @@ function renderGM(){
   const g=S.gm,se=S.season,me=se.teams[g.team],r=S.rosters[g.team];
   S.team={level:"NHL",id:g.team};applyTeamTheme();
   const pay=payroll(r);
-  $("gmBanner").innerHTML=`<div style="position:absolute;right:10px;top:10px">${logoImg("NHL",g.team,64)}</div><div class="k">Directeur général · ${S.year}-${S.year+1}</div><div class="t">${teamName(me)}</div><span class="r">${S.player.first} ${S.player.last}</span> <span class="r ${g.rep>=60?"win":""}">Confiance du proprio ${g.rep}%</span><div class="bstats"><div><b>${me.w}-${me.l}-${me.otl}</b><small>FICHE</small></div><div><b>${Math.round(rosterStrength(r))}</b><small>FORCE</small></div><div><b>${fmt$(pay)}</b><small>MASSE</small></div><div><b>${fmt$(CAP-pay)}</b><small>ESPACE</small></div></div>`;
+  const coachMode=isCoach();["gtabTrade","gtabFA","gtabProsp"].forEach(id=>{const b=document.querySelector(`#gmTabs [data-gtab="${id}"]`);if(b)b.style.display=coachMode?"none":"";});const lb=$("tabLinesBtn");if(lb)lb.style.display=coachMode?"":"none";
+  if(coachMode){if(g.moraleUntil!=null&&se.gamesPlayed>=g.moraleUntil){g.morale=0;g.moraleUntil=null;}coachApply();renderCoachLines();}
+  $("gmBanner").innerHTML=`<div style="position:absolute;right:10px;top:10px">${logoImg("NHL",g.team,64)}</div><div class="k">${coachMode?"Entraîneur-chef":"Directeur général"} · ${S.year}-${S.year+1}</div><div class="t">${teamName(me)}</div><span class="r">${S.player.first} ${S.player.last}</span> <span class="r ${g.rep>=60?"win":""}">Confiance du proprio ${g.rep}%</span><div class="bstats"><div><b>${me.w}-${me.l}-${me.otl}</b><small>FICHE</small></div><div><b>${Math.round(rosterStrength(r))}</b><small>FORCE</small></div><div><b>${fmt$(pay)}</b><small>MASSE</small></div><div><b>${fmt$(CAP-pay)}</b><small>ESPACE</small></div></div>`;
   $("gmSeasonTitle").textContent=`Saison ${S.year}-${S.year+1} · match ${se.gamesPlayed}/${se.gp}`;
   const sorted=se.teams.slice().sort((a,b)=>(b.w*2+b.otl)-(a.w*2+a.otl));const rank=sorted.findIndex(t=>t.id===me.id)+1;
   $("gmStats").innerHTML=`<div class="stat"><b>${me.w}</b><small>V</small></div><div class="stat"><b>${me.l}</b><small>D</small></div><div class="stat"><b>${me.otl}</b><small>DP</small></div><div class="stat"><b>${rank}e</b><small>RANG</small></div><div class="stat"><b>${me.gf-me.ga>0?"+":""}${me.gf-me.ga}</b><small>DIFF</small></div>`;
@@ -2102,7 +2502,7 @@ function renderGM(){
   // alignement
   const grp=[["Attaquants",x=>x[1]!=="D"&&x[1]!=="G"],["Défenseurs",x=>x[1]==="D"],["Gardiens",x=>x[1]==="G"]];
   let h=`<div class="capbar"><i style="width:${Math.min(100,pay/CAP*100)}%"></i></div><p class="muted">${r.length} joueurs · ${fmt$(pay)} / ${fmt$(CAP)}</p>`;
-  grp.forEach(([t,f])=>{h+=`<div class="grp">${t}</div>`;r.map((x,i)=>({x,i})).filter(o=>f(o.x)).sort((a,b)=>b.x[2]-a.x[2]).forEach(o=>{const x=o.x;h+=`<div class="gmrow ${gmPkg.players.includes(o.i)?"sel":""}"><span class="nm">${x[0]}<small>${x[1]} · ${x[3]} ans · ${x[6]} an${x[6]>1?"s":""} de contrat${x[4]&&x[3]<=24?" · pot. "+Math.max(x[2],x[4]-4)+"-"+(x[4]+3):""}</small></span><span class="sal">${fmt$(x[5])}</span><span class="ov" style="background:${ovrColor(x[2],"NHL")}">${x[2]}</span><button onclick="gmTogglePkgPlayer(${o.i})" style="${gmPkg.players.includes(o.i)?"background:var(--gold);color:#000;border-color:var(--gold)":""}">${gmPkg.players.includes(o.i)?"Retirer":"Offrir"}</button>${x[6]<=1&&!x[7]?`<button onclick="gmExtend(${o.i})" style="background:var(--tacc);color:#000;border-color:var(--tacc)">Prolonger</button>`:""}<button onclick="gmRelease(${o.i})">Libérer</button></div>`;});});
+  grp.forEach(([t,f])=>{h+=`<div class="grp">${t}</div>`;r.map((x,i)=>({x,i})).filter(o=>f(o.x)).sort((a,b)=>b.x[2]-a.x[2]).forEach(o=>{const x=o.x;h+=`<div class="gmrow ${gmPkg.players.includes(o.i)?"sel":""}"><span class="nm">${x[0]}<small>${x[1]} · ${x[3]} ans · ${x[6]} an${x[6]>1?"s":""} de contrat${x[4]&&x[3]<=24?" · pot. "+Math.max(x[2],x[4]-4)+"-"+(x[4]+3):""}</small></span><span class="sal">${fmt$(x[5])}</span><span class="ov" style="background:${ovrColor(x[2],"NHL")}">${x[2]}</span>${coachMode?"":`<button onclick="gmTogglePkgPlayer(${o.i})" style="${gmPkg.players.includes(o.i)?"background:var(--gold);color:#000;border-color:var(--gold)":""}">${gmPkg.players.includes(o.i)?"Retirer":"Offrir"}</button>${x[6]<=1&&!x[7]?`<button onclick="gmExtend(${o.i})" style="background:var(--tacc);color:#000;border-color:var(--tacc)">Prolonger</button>`:""}<button onclick="gmRelease(${o.i})">Libérer</button>`}</div>`;});});
   $("gmRoster").innerHTML=h;
   // échanges (paquet : joueurs + choix)
   gmPkg.players=gmPkg.players.filter(i=>r[i]);
@@ -2140,7 +2540,7 @@ function renderGM(){
 }
 function renderGMEnd(rec,po,picks){
   const g=S.gm;applyTeamTheme();
-  $("gmEndBanner").innerHTML=`<div class="k">Bilan DG · ${S.year}-${S.year+1}</div><div class="t">${rec.team}</div><span class="r ${po.won?"win":""}">${po.won?"Champions de la Coupe Stanley":po.qualified?"Séries : "+rec.po:"Séries ratées"}</span> <span class="r ${rec.ok?"win":""}">Objectif ${rec.ok?"atteint":"raté"}</span><div class="bstats"><div><b>${rec.w}-${rec.l}-${rec.otl}</b><small>FICHE</small></div><div><b>${rec.rank}e</b><small>RANG</small></div><div><b>${g.rep}%</b><small>CONFIANCE</small></div></div>`;
+  $("gmEndBanner").innerHTML=`<div class="k">Bilan ${isCoach()?"entraîneur":"DG"} · ${S.year}-${S.year+1}</div><div class="t">${rec.team}</div><span class="r ${po.won?"win":""}">${po.won?"Champions de la Coupe Stanley":po.qualified?"Séries : "+rec.po:"Séries ratées"}</span> <span class="r ${rec.ok?"win":""}">Objectif ${rec.ok?"atteint":"raté"}</span><div class="bstats"><div><b>${rec.w}-${rec.l}-${rec.otl}</b><small>FICHE</small></div><div><b>${rec.rank}e</b><small>RANG</small></div><div><b>${g.rep}%</b><small>CONFIANCE</small></div></div>`;
   $("gmEndPo").innerHTML=po.qualified?(po.series||[]).map(sr=>`<div class="news ${sr.won?"":""}">${sr.name} ${sr.won?"✅":"❌"} ${sr.score} vs ${sr.opp}</div>`).join(""):"<span class='muted'>Pas de séries cette année.</span>";
   $("gmDraft").innerHTML=picks.length?picks.map(x=>`<div class="news">${x.pick}e au total : <b>${x.name}</b> (${x.pos}, ${x.lg}) — potentiel estimé ${x.pick<=10?"élite":x.pick<=32?"premier plan":"régulier"}</div>`).join("")+"<p class='muted'>Ils rejoignent ton club-école et monteront selon leur développement.</p>":"<span class='muted'>Aucun choix cette année.</span>";
   $("gmOwner").innerHTML=g.fired?`<div class="news" style="border-color:var(--red)">🏁 Le propriétaire te remercie de tes services. Tu es congédié.</div>`:`<div class="news">${g.rep>=70?"« Excellent travail. Continue comme ça. »":g.rep>=40?"« On attend mieux l'an prochain. »":"« C'est ta dernière chance. »"}</div>`;
@@ -2158,7 +2558,7 @@ function poSimSeries(A,B,isMine,po,round,gamesSoFar){
 function poSimGame(A,B,isMine,po,wa,wb){
   const se=S.season,me=se.teams[S.team.id];
   if(isMine&&wa===3&&wb===3&&se.game7Choice){const mine=A.id===me.id?A:B;mine.str+=se.game7Choice==="risk"?(Math.random()<.5?6:-5):2;}
-  const r=simMatch({...A,w:0,l:0,otl:0,gf:0,ga:0},{...B,w:0,l:0,otl:0,gf:0,ga:0},isMine);
+  const r=simMatch({...A,w:0,l:0,otl:0,gf:0,ga:0},{...B,w:0,l:0,otl:0,gf:0,ga:0},isMine,true);
   if(isMine){const mine=A.id===me.id?A:B;const myG=mine===A?r.gA:r.gB,oppG=mine===A?r.gB:r.gA;
     if(r.my&&!r.my.goalie){po.myPts.g+=r.my.g;po.myPts.a+=r.my.a;po.myPts.gp++;}
     if(r.my&&r.my.goalie){po.myPts.gp++;if(myG>oppG)po.myPts.w++;if(r.my.ga===0)po.myPts.so++;}}
@@ -2166,10 +2566,10 @@ function poSimGame(A,B,isMine,po,wa,wb){
 }
 function poGameLine(r,A,B,wa,wb,n){
   const me=S.season.teams[S.team.id];const mine=A.id===me.id?A:B,opp=mine===A?B:A;const myG=mine===A?r.gA:r.gB,oppG=mine===A?r.gB:r.gA;
-  let line=`<b>${myG>oppG?"V":"D"}${r.ot?" (P)":""}</b> ${myG}-${oppG}`;
+  let line=`<b>${myG>oppG?"V":"D"}${r.ot?(r.otN>1?" ("+r.otN+"e P)":" (P)"):""}</b> ${myG}-${oppG}`;
   if(r.my&&!r.my.goalie&&(r.my.g||r.my.a))line+=` <span class="o">${r.my.g} B, ${r.my.a} A</span>`;
   if(r.my&&r.my.goalie)line+=` ${r.my.sv}/${r.my.shots} arrêts`;
-  const scorers=(r.events||[]).map(e=>`${e.per===4?"P":"P"+e.per} ${e.t===mine.id?mine.city:opp.city} : ${e.scorer}`).join("<br>");
+  const scorers=(r.events||[]).map(e=>`${perLabel(e.per,true)} ${e.t===mine.id?mine.city:opp.city} : ${e.scorer}`).join("<br>");
   return {line:`M${n} ${line} <span class="muted">(${wa}-${wb})</span>`,d:scorers};
 }
 function poNewState(){
@@ -2229,7 +2629,9 @@ function poPlayGame(animated){
   const se=S.season,po=se.po;if(!po||po.done)return;
   const me=se.teams[S.team.id];const opp=poMyOpponent(po);
   const alive=po.alive;const i=alive.indexOf(me.id);const A=i<alive.length/2?me:opp,B=A===me?opp:me;
-  const cur=po.cur;const r=poSimGame(A,B,true,po,cur.wa,cur.wb);
+  const cur=po.cur;
+  if(cur.wa===3&&cur.wb===3&&!cur.g7){cur.g7=true;const nm7=PO_NAMES[po.round-1]||"Ronde "+po.round;queueMoment({lines:[[nm7+" · Match no 7","sub"],["TOUT OU RIEN","huge"],[`${logoImg(se.level,me.id,44)} ${me.city} vs ${opp.city} ${logoImg(se.level,opp.id,44)}`,"big"],[se.game7Choice==="risk"?"Tu as choisi de tout risquer.":se.game7Choice==="safe"?"Tu as choisi de jouer serré.":"Soixante minutes pour une saison.","sub"]]});save();playMoments(()=>renderSeason());return false;}
+  const r=poSimGame(A,B,true,po,cur.wa,cur.wb);
   if(r.gA>r.gB)cur.wa+=A===me?1:0,cur.wb+=A===me?0:1;else cur.wb+=A===me?1:0,cur.wa+=A===me?0:1;
   // cur.wa = mes victoires, cur.wb = les siennes
   const myW=cur.wa,hisW=cur.wb;
@@ -2237,7 +2639,13 @@ function poPlayGame(animated){
   const myG=r.gA,oppG=r.gB; // simMatch(A,B) : si A===me -> gA ; sinon inversé
   const mg=A===me?r.gA:r.gB,og=A===me?r.gB:r.gA;const won=mg>og;
   const nm=PO_NAMES[po.round-1]||"Ronde "+po.round;
-  se.log.unshift({w:won,html:`<span class="muted">${nm} · M${cur.games.length}</span> <span class="res ${won?"v":"d"}">${won?"V":"D"}${r.ot?"P":""}</span>${mg}-${og} vs ${opp.city} <span class="muted">(série ${myW}-${hisW})</span>${r.my&&!r.my.goalie&&(r.my.g||r.my.a)?` — <span class="o">${r.my.g} B, ${r.my.a} A</span>`:""}${r.my&&r.my.goalie?` — ${r.my.sv}/${r.my.shots} arrêts`:""}`,d:gl.d,_res:{events:r.events,ot:r.ot,A:{id:A.id,city:A.city},B:{id:B.id,city:B.city},stars:r.stars,my:r.my?{g:r.my.g,a:r.my.a,sv:r.my.sv,shots:r.my.shots,goalie:r.my.goalie}:null,score:[mg,og],opp:opp.city,won}});
+  po.heroics=po.heroics||0;se.highlights=se.highlights||[];
+  const g7=cur.games.length===7;const myName=S.player.first+" "+S.player.last;
+  const myOtGoal=r.ot&&won&&r.events&&r.events.length&&r.events[r.events.length-1].scorer===myName;
+  if(won&&r.my&&!r.my.goalie&&(myOtGoal||(mg-og===1&&r.my.g>0&&(g7||myW===4)))){po.heroics++;const what=myOtGoal?`but en ${r.otN>1?r.otN+"e ":""}prolongation`:g7?"but gagnant du match no 7":"but gagnant qui élimine "+opp.city;se.highlights.push(`🦸 ${what} vs ${opp.city}`);if(g7||myW===4||r.otN>=2)queueMoment({sil:true,lines:[[nm+(g7?" · match no 7":""),"sub"],["HÉROS","huge"],[myName,"big"],[what.charAt(0).toUpperCase()+what.slice(1)+" !","sub"]],confetti:myW===4});}
+  if(won&&r.my&&r.my.goalie&&(g7||myW===4)&&r.my.ga<=1){po.heroics++;se.highlights.push(`🧱 ${r.my.sv} arrêts dans le match ${g7?"no 7":"décisif"} vs ${opp.city}`);}
+  if(r.otN>=2)se.highlights.push(`⏱️ Match de ${r.otN} prolongations vs ${opp.city} (${won?"gagné":"perdu"})`);
+  se.log.unshift({w:won,html:`<span class="muted">${nm} · M${cur.games.length}${g7?" 🔥":""}</span> <span class="res ${won?"v":"d"}">${won?"V":"D"}${r.ot?(r.otN>1?r.otN+"P":"P"):""}</span>${mg}-${og} vs ${opp.city} <span class="muted">(série ${myW}-${hisW})</span>${r.my&&!r.my.goalie&&(r.my.g||r.my.a)?` — <span class="o">${r.my.g} B, ${r.my.a} A</span>`:""}${r.my&&r.my.goalie?` — ${r.my.sv}/${r.my.shots} arrêts`:""}`,d:gl.d,_res:{events:r.events,ot:r.ot,A:{id:A.id,city:A.city},B:{id:B.id,city:B.city},stars:r.stars,my:r.my?{g:r.my.g,a:r.my.a,sv:r.my.sv,shots:r.my.shots,goalie:r.my.goalie}:null,score:[mg,og],opp:opp.city,won}});
   if(myW===4||hisW===4){
     // série terminée : résultat exprimé dans l'ordre A/B pour poAdvanceRound
     const res={wa:A===me?myW:hisW,wb:A===me?hisW:myW,games:cur.games};
@@ -2247,6 +2655,8 @@ function poPlayGame(animated){
     po.cur={wa:0,wb:0,games:[]};const nopp=poMyOpponent(po);addNews(`✅ ${nm} gagné ${myW}-${hisW} vs ${teamName(opp)}. Prochain : <b>${PO_NAMES[po.round-1]||"Ronde "+po.round}</b> vs ${teamName(nopp)}.`);toast("✅ Série gagnée !");
   }
   renderSeason();save();
+  if(momentQueue.length&&!animated)playMoments(()=>renderSeason());
+  return true;
 }
 function poPlaySeries(){const se=S.season;let g=0;while(se.po&&!se.po.done&&se.po.cur&&se.po.cur.wa<4&&se.po.cur.wb<4&&g<7){g++;poPlayGame(false);if(!se.po)return;if(se.po.cur.wa===0&&se.po.cur.wb===0)return;}}
 function poPlayAll(){const se=S.season;let guard=0;while(se.po&&guard<40){guard++;poPlayGame(false);}}
@@ -2307,6 +2717,7 @@ function finishSeason(){
       const myPo=p.pos!=="G"?se.playoffs.myPts.g+se.playoffs.myPts.a:se.playoffs.myPts.w*2.2;
       if(myPo>=se.playoffs.rivalPts*(p.pos==="G"?.9:1))awards.push("smythe");}
     hist.smythe=awards.includes("smythe")?myName:(se.playoffs.rivalName||"");
+    if((se.playoffs.heroics||0)>=3)awards.push("po_hero");
   }else if(lvl==="JR"){
     if(p.pos!=="G"&&rankPts===1)awards.push("jr_top");
     if(p.pos!=="G"&&rankPts<=2&&Math.random()<(rankPts===1?.7:.3))awards.push("jr_mvp");
@@ -2341,12 +2752,13 @@ function finishSeason(){
   const objs=se.objectives||[];const okN=objs.filter(o=>objectiveStatus(o).ok).length;
   S.objResult={ok:okN,total:objs.length};
   if(objs.length&&okN===objs.length){S.objBonus=2;}else if(objs.length&&okN===0){S.nextRoleDrop=true;}
+  relEndSeason();genRivalSeason(hist);heirSeasonNews();
   checkChallenges();
   // --- finances
   seasonFinances(rec,awards);
   progress();
   if(S.contract){S.contract.years--;}
-  const news=[];
+  const news=(S.pendingNews||[]).slice();S.pendingNews=[];
   // repêchage
   if(!p.drafted&&p.age>=18){
     const perf=p.pos==="G"?((st.sv+st.ga?st.sv/(st.sv+st.ga):.9)-.9)*250:(st.gp?st.pts/st.gp:0)*10;
@@ -2381,7 +2793,7 @@ function finishSeason(){
     else nextLevel="AHL";
     if(lvl==="NHL"&&ovrNew>=66)nextLevel="NHL";
     if(nextLevel!==lvl){
-      if(nextLevel==="NHL"){news.push(`🚀 Tu fais le grand club ! Prochaine saison dans la <b>LNH</b>.`);const tid=S.contract?S.contract.team:(p.drafted?p.drafted.teamId:0);queueMoment({sil:true,lines:[["Tu fais le grand club","sub"],["BIENVENUE DANS LA LNH","huge"],[`${NHL[tid][0]} ${NHL[tid][1]}`,"big"]]});}
+      if(nextLevel==="NHL"){news.push(`🚀 Tu fais le grand club ! Prochaine saison dans la <b>LNH</b>.`);const tid=S.contract?S.contract.team:(p.drafted?p.drafted.teamId:0);queueMoment({sil:true,lines:[["Tu fais le grand club","sub"],["BIENVENUE DANS LA LNH","huge"],[`${nhlName(tid)}`,"big"]]});}
       else if(nextLevel==="AHL")news.push(`⬇️ Assigné au club-école (AHL). Travaille fort pour remonter.`);
       else news.push(`↩️ Retour au junior pour une saison de plus.`);
     }
@@ -2439,6 +2851,9 @@ function progress(){
   p.age++;
 }
 const TAX_CA=[3,10,14,19,26,28,31];const TAX_LOW=[8,11,15,23,25,29];const BIG_MARKET=[14,26,18,5,12,1,30];
+/* remet les tables de ligue (expansions, déménagements) à l'état d'origine pour une nouvelle carrière */
+const LEAGUE0={NHL:JSON.parse(JSON.stringify(NHL)),TC:JSON.parse(JSON.stringify(TEAM_COLORS)),CODE:NHL_CODE.slice(),ESPN:ESPN_CODE.slice(),AHL:JSON.parse(JSON.stringify(AHL_TEAMS)),TAXCA:TAX_CA.slice(),TAXLOW:TAX_LOW.slice()};
+function resetLeagueArrays(){const put=(arr,src)=>{arr.length=0;src.forEach(x=>arr.push(JSON.parse(JSON.stringify(x))));};put(NHL,LEAGUE0.NHL);put(TEAM_COLORS,LEAGUE0.TC);put(NHL_CODE,LEAGUE0.CODE);put(ESPN_CODE,LEAGUE0.ESPN);put(AHL_TEAMS,LEAGUE0.AHL);put(TAX_CA,LEAGUE0.TAXCA);put(TAX_LOW,LEAGUE0.TAXLOW);}
 function teamTax(id){return TAX_CA.includes(id)?.50:TAX_LOW.includes(id)?.37:.44;}
 function teamNeed(id){
   const p=S.player,ovr=overall(p),r=S.rosters[id];
@@ -2505,8 +2920,8 @@ function seasonFinances(rec,awards){
   let endorse=0;
   if(lvl==="NHL"){const ovr=overall(p);endorse=Math.max(0,(ovr-74))*80000*(1+awards.length*.5)*(BIG_MARKET.includes(tid)?1.6:1)+(rec.cup?500000:0)+(p.captain==="C"?150000:0);}
   else if(lvl==="JR"&&p.drafted)endorse=50000;
-  endorse=Math.round(endorse/10000)*10000;
-  if(se.bonusClause){const v=se.stats[se.bonusClause.stat];if(v>=se.bonusClause.target){gross+=se.bonusClause.bonus;S.news.push(`💰 Clause atteinte : boni de ${fmt$(se.bonusClause.bonus)} !`);}else if(v<se.bonusClause.target/2&&S.contract){S.contract.years=0;S.news.push(`📄 Clause ratée : l'équipe rachète ton contrat. Tu es agent libre.`);}}
+  endorse=Math.round(endorse/10000)*10000+(lvl!=="JR"?sponsorIncome():0);
+  if(se.bonusClause){const v=se.stats[se.bonusClause.stat];if(v>=se.bonusClause.target){gross+=se.bonusClause.bonus;laterNews(`💰 Clause atteinte : boni de ${fmt$(se.bonusClause.bonus)} !`);}else if(v<se.bonusClause.target/2&&S.contract){S.contract.years=0;laterNews(`📄 Clause ratée : l'équipe rachète ton contrat. Tu es agent libre.`);}}
   const fee=agentInfo().fee;endorse=Math.round(endorse*(1+(agentInfo().lvl-1)*.25));
   const net=Math.round(gross*(1-tax-fee)+endorse*(1-tax));
   f.gross+=gross;f.endorse+=endorse;f.net+=net;
@@ -2551,6 +2966,7 @@ function renderNext(){
   if(se.done){box.innerHTML=`<b>Saison terminée</b> — place aux séries.`;return;}
   const opp=nextOpponent();const tags=[];
   if(p.rival&&opp.city===p.rival.team)tags.push(`⚡ duel vs ${p.rival.name}`);
+  else if(S.genRival&&!S.genRival.retired&&genRivalTeam()===opp.id)tags.push(`⚡ face à ${S.genRival.name}`);
   const former=S.history.some(h=>h.level===se.level&&h.team===teamName(opp));if(former)tags.push("🏠 retour contre ton ancienne équipe");
   const sorted=se.teams.slice().sort((a,b)=>(b.w*2+b.otl)-(a.w*2+a.otl));const rk=sorted.findIndex(t=>t.id===opp.id)+1,mk=sorted.findIndex(t=>t.id===me.id)+1;
   if(Math.abs(rk-mk)<=2&&se.gamesPlayed>20)tags.push("📊 match à 4 points");
@@ -2569,10 +2985,11 @@ function leagueTransaction(){
 }
 function renderSeason(){
   const se=S.season,p=S.player,st=se.stats,me=se.teams[S.team.id];
-  applyTeamTheme();renderNext();
+  applyTeamTheme();renderNext();renderStyleBar();
+  if(!se.relInit&&!se.gm){se.relInit=true;if(!relOf().mates.length)relNewSeason();}
   $("pillSeason").textContent=`${S.year}-${(S.year+1).toString().slice(2)} · ${se.level==="JR"?p.jrLeague:se.level==="AHL"?"AHL":"LNH"}`;
   $("hOvr").textContent=overall(p);
-  $("hName").innerHTML=p.first+" "+p.last+(p.captain?`<span class="cap">${p.captain}</span>`:"");
+  $("hName").innerHTML=p.first+" "+p.last+(p.nick?` <small class="muted" style="font-size:11px;font-weight:400">« ${p.nick} »</small>`:"")+(p.captain?`<span class="cap">${p.captain}</span>`:"");
   const FLAG={Canada:"🇨🇦","États-Unis":"🇺🇸",Suède:"🇸🇪",Finlande:"🇫🇮",Russie:"🇷🇺",Tchéquie:"🇨🇿",Suisse:"🇨🇭",Slovaquie:"🇸🇰",Allemagne:"🇩🇪"};
   $("hInfo").innerHTML=`${flag(p.nat)} ${p.nat} · ${p.age} ans · ${p.pos==="G"?"Gardien "+se.role:se.role+" "+(p.pos==="D"?"paire":"trio")}`;
   const [c1,c2]=teamColors(se.level,S.team.id);
@@ -2585,6 +3002,7 @@ function renderSeason(){
   if(p.cups)badges+=`<span class="badge gold">🏆 ×${p.cups}</span>`;
   if(se.form&&se.gamesPlayed<se.formUntil)badges+=`<span class="badge">${se.form>1?"🔥 En feu":"❄️ Diminué"}</span>`;
   if(se.injuryGames>0)badges+=`<span class="badge">🚑 ${se.injuryGames} m.</span>`;
+  {const L=lifeOf();if(L.pop>=70||L.pop<=35)badges+=`<span class="badge">${L.pop>=70?"❤️":"👎"} partisans : ${popLabel(L.pop)}</span>`;}
   $("pcBadges").innerHTML=badges;
   $("pcPhoto").src=portraitFor(p.pos,p.age);$("pcNum").textContent="#"+(p.num||97);
   $("pcLogo").innerHTML=logoImg(se.level,S.team.id,84);
@@ -2608,7 +3026,7 @@ function renderSeason(){
   const inPo=!!se.inPlayoffs;
   $("btnSim1").disabled=done&&!inPo;$("btnSim10").disabled=done&&!inPo;
   $("btnSim10").innerHTML=inPo?"⏩ Fin de la série":"⏩ 10 matchs";
-  $("btnSimAll").innerHTML=inPo?"⏭ Fin des séries":done?"🏆 Séries & bilan":"⏭ Fin de saison";
+  $("btnSimAll").innerHTML=inPo?"⏭ Fin des séries":done?"🏆 Séries & bilan":"⏭ Fin de saison";$("btnQuick").style.display=(inPo||done)?"none":"";
   if(inPo&&se.po){const po=se.po;const pm=po.myPts;$("seasonStats").innerHTML=(p.pos==="G"?[["PJ",pm.gp],["V",pm.w],["BL",pm.so]]:[["PJ",pm.gp],["B",pm.g],["A",pm.a],["PTS",pm.g+pm.a]]).map(c=>`<div class="stat"><b>${c[1]}</b><small>${c[0]} séries</small></div>`).join("")+`<div class="stat"><b>${po.alive.length}</b><small>équipes en vie</small></div>`;
     $("nextMatch").innerHTML=`<div style="display:flex;align-items:center;gap:10px">${logoImg(se.level,poMyOpponent(po).id,36)}<div><div class="muted" style="font-size:11px">${PO_NAMES[po.round-1]||"Ronde "+po.round} · match ${po.cur.games.length+1}</div><b>vs ${teamName(poMyOpponent(po))}</b> <span class="muted">· série ${po.cur.wa}-${po.cur.wb}</span></div></div>`;}
   // ligne du temps
@@ -2647,6 +3065,7 @@ function renderLeaders(){
   $("leaders").innerHTML=h;
 }
 function renderFin(){
+  renderLife();
   const f=S.fin;if(!f||!f.years.length){$("finView").innerHTML="<span class='muted'>Tes premiers revenus arriveront avec ton premier contrat pro.</span>";return;}
   let h=`<div class="stat-grid"><div class="stat"><b>${fmt$(netWorth())}</b><small>Fortune nette</small></div><div class="stat"><b>${fmt$(f.gross)}</b><small>Salaires gagnés</small></div><div class="stat"><b>${fmt$(f.endorse)}</b><small>Commandites</small></div><div class="stat"><b>${fmt$(f.charity||0)}</b><small>Dons</small></div></div>`;
   if(f.invested)h+=`<p class="muted" style="margin-top:8px">Placements : ${fmt$(f.invested)}</p>`;
@@ -2661,7 +3080,7 @@ function renderArchive(){
   if(!ya.options.length||ya.dataset.n!==String(yrs.length)){ya.innerHTML=yrs.map(y=>`<option value="${y}">${y}-${(y+1).toString().slice(2)}</option>`).join("");ya.dataset.n=String(yrs.length);}
   if(!ta.options.length){ta.innerHTML=NHL.map((t,i)=>`<option value="${i}">${t[0]} ${t[1]}</option>`).join("");ta.value=String(S.team.id<NHL.length?S.team.id:0);}
   const y=+ya.value,ti=+ta.value;const r=(A[y]||[])[ti]||[];
-  v.innerHTML=r.length?`<div class="grp">${NHL[ti][0]} ${NHL[ti][1]} · ${y}-${(y+1).toString().slice(2)}</div>`+r.map(x=>`<div class="gmrow"><span class="nm">${x[0]}<small>${x[1]}</small></span><span class="ov" style="background:${ovrColor(x[2],"NHL")}">${x[2]}</span></div>`).join(""):"<span class='muted'>Pas d'archive pour cette équipe cette année.</span>";
+  v.innerHTML=r.length?`<div class="grp">${nhlName(ti)} · ${y}-${(y+1).toString().slice(2)}</div>`+r.map(x=>`<div class="gmrow"><span class="nm">${x[0]}<small>${x[1]}</small></span><span class="ov" style="background:${ovrColor(x[2],"NHL")}">${x[2]}</span></div>`).join(""):"<span class='muted'>Pas d'archive pour cette équipe cette année.</span>";
   ya.onchange=renderArchive;ta.onchange=renderArchive;
 }
 function renderLeague(){
@@ -2757,7 +3176,7 @@ function renderPlayer(){
   else
   $("attrView").innerHTML=names.map((n,i)=>`<div class="attr"><span class="name">${n}</span><div class="bar"><i style="width:${p.attrs[i]}%"></i></div><span class="val">${p.attrs[i]}</span></div>`).join("")+`<p class="muted" style="margin-top:8px">Potentiel estimé : ${p.potential>=88?"Élite / franchise":p.potential>=80?"Joueur de premier plan":p.potential>=74?"Joueur régulier de la LNH":"Joueur de soutien"}</p>`;
   let c="";
-  if(S.contract){c=`<b>${NHL[S.contract.team][0]} ${NHL[S.contract.team][1]}</b> · ${fmt$(S.contract.salary)}/an · ${S.contract.years} an${S.contract.years>1?"s":""} restant${S.contract.years>1?"s":""} <span class="tag">${S.contract.type}</span>${S.contract.ntc?' <span class="tag" style="color:var(--gold)">non-échange</span>':""}`;}
+  if(S.contract){c=`<b>${nhlName(S.contract.team)}</b> · ${fmt$(S.contract.salary)}/an · ${S.contract.years} an${S.contract.years>1?"s":""} restant${S.contract.years>1?"s":""} <span class="tag">${S.contract.type}</span>${S.contract.ntc?' <span class="tag" style="color:var(--gold)">non-échange</span>':""}`;}
   else if(p.drafted)c=`Repêché ${p.drafted.year} par ${p.drafted.team} (${p.drafted.round===0?"agent libre":p.drafted.round+"e tour, "+p.drafted.pick+"e"})`;
   else c=`<span class="muted">Pas encore repêché. Admissible à ${p.age>=18?"ce":"18"} ans.</span>`;
   const canAsk=S.season&&!S.season.gm&&S.season.level!=="JR"&&!S.season.inPlayoffs&&!S.season.done&&!S.season.tradeAsked&&S.season.gamesPlayed>=5;
@@ -2765,6 +3184,8 @@ function renderPlayer(){
   c+=`<div class="btns" style="margin-top:10px"><button ${canAsk?"":"disabled"} onclick="askTrade()">🔁 Demander une transaction</button><button onclick="changeAgent()">🤝 Changer d'agent</button></div>`+(S.season&&S.season.tradeAsked?`<p class="muted">Demande déjà faite cette saison.</p>`:(S.season&&S.season.level==="JR"?`<p class="muted">Disponible une fois dans les rangs pros.</p>`:""));
   $("contractView").innerHTML=c+(p.rival?`<p style="margin-top:8px">⚡ Rival : <b>${p.rival.name}</b> (${p.rival.team}) · duels ${p.rival.myWins}-${p.rival.hisWins}</p>`:"");
   $("awardsView").innerHTML=renderAwardList(p.awards);
+  renderRel();renderGenRival();
+  const hv=$("heirView");if(hv){hv.parentElement.style.display=S.heir?"block":"none";if(S.heir)hv.innerHTML=heirInfoHtml();}
 }
 function renderAwardList(list){
   if(!list.length)return "<span class='muted'>Aucun trophée pour l'instant.</span>";
@@ -2871,6 +3292,7 @@ function renderEnd(rec,awards){
     re();
   }else{$("endTrainCard").style.display="block";$("attrTrain").innerHTML="<span class='muted'>Plus de progression possible à cet âge.</span>";$("trainPts").textContent="";}
   renderFinCard();
+  try{drawSeasonCard(rec,awards);}catch(e){}
   // offres
   if(S.pendingOffers){$("endOffersCard").style.display="block";renderOffers();}else $("endOffersCard").style.display="none";
   $("btnRetire").style.display=(p.age>=30||S.forcedRetire)?"block":"none";
@@ -2915,6 +3337,7 @@ if(typeof history!=="undefined"&&history.pushState){history.pushState({ch:1},"")
 /* filet de sécurité : une erreur n'efface jamais la partie */
 window.addEventListener("error",e=>{try{save();}catch(x){}const b=$("errbar");if(b){b.textContent="Oups, une erreur s'est produite ("+(e.message||"").slice(0,80)+"). Ta partie est sauvegardée. Si ça se reproduit, exporte ta sauvegarde depuis le menu.";b.style.display="block";setTimeout(()=>b.style.display="none",6000);}});
 $("btnSim1").onclick=()=>playOneLive();
+$("btnQuick").onclick=()=>{const se=S.season;if(se.event)return;quickSeason();};
 document.querySelectorAll("#logFilters button").forEach(b=>b.onclick=()=>{S.logFilter=b.dataset.f;renderSeason();});
 function playBlockLive(n){
   const se=S.season;let i=0;const total=n;
@@ -2933,13 +3356,14 @@ $("btnNext").onclick=()=>{
   const p=S.player;
   const prevTeam=(S.level!=="JR")?S.team.id:-1;
   if(S.pendingOffers){const o=S.pendingOffers[S.selectedOffer]||S.pendingOffers[0];S.contract={team:o.team,years:o.years,salary:o.salary,type:"vétéran",ntc:!!o.ntc};if(o.bonus){S.fin=S.fin||{gross:0,net:0,endorse:0,years:[],assets:[],charity:0,spent:0};S.fin.gross+=o.bonus;S.fin.net+=Math.round(o.bonus*(1-teamTax(o.team)));}S.pendingOffers=null;S.selectedOffer=null;}
+  {const L=lifeOf();if(L.spouse&&!L.spouse.married){L.spouse.married=true;S.leagueNews=S.leagueNews||[];S.leagueNews.push(`💒 Mariage avec <b>${L.spouse.name}</b> cet été. Plusieurs coéquipiers étaient là.`);}}
   if(S.trainPts>0){S.bank=(S.bank||0)+S.trainPts;toast(`🎓 ${S.trainPts} point(s) non placés conservés — onglet Joueur.`);}S.trainPts=0;
-  S.year++;evolveLeague();S.leagueNews=S.leagueNews||[];checkExpansion(S.leagueNews);
+  S.year++;evolveLeague();S.leagueNews=S.leagueNews||[];checkExpansion(S.leagueNews);firePostEvents();
   const nl=S.nextLevel;
   if(nl==="JR"){S.level="JR";if(S.team.level!=="JR")assignJuniorTeam();}
   else{S.level=nl;S.team={level:nl,id:S.contract?S.contract.team:(p.drafted?p.drafted.teamId:ri(0,NHL.length-1))};}
   // échange aléatoire
-  if((S.level==="NHL"||S.level==="AHL")&&S.contract&&!S.contract.ntc&&Math.random()<.05&&S.contract.type!=="recrue"){const nt=ri(0,NHL.length-1);if(nt!==S.contract.team){S.contract.team=nt;S.team.id=nt;toast("🔁 Tu as été échangé aux "+NHL[nt][0]+" "+NHL[nt][1]+" !");}}
+  if((S.level==="NHL"||S.level==="AHL")&&S.contract&&!S.contract.ntc&&Math.random()<.05&&S.contract.type!=="recrue"){const nt=ri(0,NHL.length-1);if(nt!==S.contract.team){S.contract.team=nt;S.team.id=nt;toast("🔁 Tu as été échangé aux "+nhlName(nt)+" !");}}
   if(S.level!=="JR"){if(S.team.id===prevTeam)S.tenure=(S.tenure||0)+1;else{S.tenure=0;p.captain=null;}}
   startSeason();
   (S.leagueNews||[]).forEach(n=>addNews(n));S.leagueNews=[];renderSeason();save();playMoments();
@@ -2978,6 +3402,7 @@ function drawCareerCard(){
   };
   if(img.complete)draw();else{img.onload=draw;img.onerror=draw;}
 }
+$("btnSaveSeasonCard").onclick=()=>{try{const cv=$("seasonCard");const a=document.createElement("a");a.download=`saison-${S.year}-${S.player.last}.png`;a.href=cv.toDataURL("image/png");document.body.appendChild(a);a.click();a.remove();toast("📤 Image enregistrée");}catch(e){toast("Impossible d'exporter l'image.");}};
 $("btnSaveCard").onclick=()=>{try{const cv=$("careerCard");const a=document.createElement("a");a.download=`carriere-${S.player.first}-${S.player.last}.png`;a.href=cv.toDataURL("image/png");document.body.appendChild(a);a.click();a.remove();toast("📤 Image enregistrée");}catch(e){toast("Impossible d'exporter l'image.");}};
 function retire(){
   const p=S.player;const first=!p.retired;p.retired=true;
@@ -2987,6 +3412,7 @@ function retire(){
   const cups=p.cups,aw=p.awards.filter(x=>!x.a.startsWith("jr")&&x.a!=="memorial").length;
   let score=p.pos==="G"?w*1.2+so*8+cups*60+aw*45:pts*1+g*.6+cups*60+aw*45;
   const hof=p.pos==="G"?score>=700:score>=1200;S.hof=hof;checkChallenges();
+  const post=planPostCareer()||{};
   $("rPhoto").src=portraitFor(p.pos,99);$("rName").textContent=p.first+" "+p.last;$("rPlaqueL").textContent=hof?"Temple de la renommée":"Fin de carrière";
   $("rSub").textContent=`${p.pos} · Retraite à ${p.age} ans · ${nhl.length} saison${nhl.length>1?"s":""} dans la LNH`;
   $("rHOF").innerHTML=hof?"🏛️":nhl.length?"🏒":"😔";
@@ -2997,7 +3423,7 @@ function retire(){
   else if(nhl.length>=8)verdict="Un vétéran fiable qui a gagné sa place pendant longtemps.";
   else if(nhl.length>=1)verdict="Tu as goûté à la LNH. Peu de gens peuvent en dire autant.";
   else verdict="Le rêve de la LNH ne s'est pas réalisé, mais le hockey t'a mené loin.";
-  $("rVerdict").innerHTML=verdict;
+  $("rVerdict").innerHTML=verdict+((post.jt||post.hofYear)?`<p style="margin-top:8px;font-size:13px;color:#d9c89a">${post.jt?`🏛️ ${post.jt.t} retirera ton n° ${p.num||97} en ${S.year+1}.`:""}${post.hofYear?` 🏛️ Intronisation au Temple prévue en ${post.hofYear}.`:""}${(S.gmOffers&&S.gmOffers.length)||nhl.length>=3?" Continue comme DG ou entraîneur pour vivre ces cérémonies.":""}</p>`:"");
   const cells=p.pos==="G"?[["PJ LNH",gp],["V",w],["BL",so],["Coupes",cups]]:[["PJ LNH",gp],["B",g],["A",a],["PTS",pts],["Coupes",cups]];
   $("rTotals").innerHTML=cells.map(c=>`<div class="stat"><b>${c[1]}</b><small>${c[0]}</small></div>`).join("");
   $("rAwards").innerHTML=renderAwardList(p.awards)+(S.fin?`<p style="margin-top:10px">💰 Fortune à la retraite : <b class="pts">${fmt$(netWorth())}</b> · ${fmt$(S.fin.gross)} de salaires · ${fmt$(S.fin.charity||0)} de dons</p>`:"")+((p.records||[]).length?`<p class="muted" style="margin-top:6px">${p.records.length} record(s) de la LNH battu(s).</p>`:"");
@@ -3012,22 +3438,34 @@ function retire(){
       [...new Set(picks)].forEach(i=>cands.push(i));}
     S.gmOffers=cands;
     $("gmOfferCard").style.display=cands.length?"block":"none";
-    $("gmOffers").innerHTML=cands.map(i=>{const rs=rosterStrength(S.rosters[i]);return `<div class="offer" data-gm="${i}">${logoImg("NHL",i,40)}<b>${NHL[i][0]} ${NHL[i][1]}</b> <span class="tag">${rs>=83?"prétendant":rs<=78?"en reconstruction":"dans le milieu"}</span><br><span class="muted">Mandat : ${rs<=78?"ramener l'équipe en séries d'ici 3 ans":rs>=83?"gagner la Coupe d'ici 2 ans":"faire les séries chaque année"} · salaire 3 M$/an</span></div>`;}).join("");
+    $("gmOffers").innerHTML=cands.map(i=>{const rs=rosterStrength(S.rosters[i]);return `<div class="offer" data-gm="${i}">${logoImg("NHL",i,40)}<b>${nhlName(i)}</b> <span class="tag">${rs>=83?"prétendant":rs<=78?"en reconstruction":"dans le milieu"}</span><br><span class="muted">Mandat : ${rs<=78?"ramener l'équipe en séries d'ici 3 ans":rs>=83?"gagner la Coupe d'ici 2 ans":"faire les séries chaque année"} · salaire 3 M$/an</span></div>`;}).join("");
     document.querySelectorAll("[data-gm]").forEach(el=>el.onclick=()=>startGM(+el.dataset.gm));
+    // offres d'entraîneur-chef
+    const cc=[];if(nhlSeasons>=3){const mid=NHL.map((t,i)=>({i,s:rosterStrength(S.rosters[i])})).sort((a,b)=>a.s-b.s);cc.push(mid[ri(8,20)].i);const last=h.filter(r=>r.level==="NHL").slice(-1)[0];if(last&&last.teamId!=null&&!cc.includes(last.teamId)&&Math.random()<.6)cc.push(last.teamId);}
+    S.coachOffers=cc;$("coachOfferCard").style.display=cc.length?"block":"none";
+    $("coachOffers").innerHTML=cc.map(i=>{const rs=rosterStrength(S.rosters[i]);return `<div class="offer" data-coach="${i}">${logoImg("NHL",i,40)}<b>${nhlName(i)}</b> <span class="tag">${rs>=83?"prétendant":rs<=78?"en reconstruction":"dans le milieu"}</span><br><span class="muted">Derrière le banc : trios, système, discours. Le DG gère les contrats.</span></div>`;}).join("");
+    document.querySelectorAll("[data-coach]").forEach(el=>el.onclick=()=>startCoach(+el.dataset.coach));
   }
   show("scrRetire");save();
   momentQueue=[];
   if(first)queueMoment({sil:true,lines:[[`${p.first} ${p.last}`,"sub"],[hof?"TEMPLE DE LA RENOMMÉE":"FIN DE CARRIÈRE","huge"],[hof?"Intronisé au premier tour de scrutin":verdict.replace(/<[^>]+>/g,""),""],[`${nhl.length} saisons LNH · ${pts||w} ${p.pos==="G"?"victoires":"points"} · ${cups} Coupe${cups>1?"s":""}`,"sub"]],confetti:hof});
   playMoments();
 }
-$("btnNewCareer").onclick=()=>{localStorage.removeItem(SAVE_KEY);S=null;initCreate();show("scrCreate");};
-$("btnNGPlus").onclick=()=>{
-  if(!confirm("Recommencer une carrière dans cette ligue (année "+S.year+", avec les joueurs tels qu'ils sont) ? Ta carrière actuelle sera archivée dans l'Histoire."))return;
+$("btnNewCareer").onclick=()=>{localStorage.removeItem(SAVE_KEY);S=null;const hb=$("heirBanner");if(hb)hb.style.display="none";initCreate();show("scrCreate");};
+function ngPlus(){
   const old=S;
   S.legacyPlayers=S.legacyPlayers||[];
   S.legacyPlayers.push({name:old.player.first+" "+old.player.last,pos:old.player.pos,years:`${old.history[0].year}-${old.year}`,pts:careerTotals().pts,w:careerTotals().w,cups:old.player.cups,hof:!!old.hof});
   S.ngCarry={year:old.year,rosters:old.rosters,ahlRosters:old.ahlRosters,jrAll:old.jrAll,leagueHistory:old.leagueHistory,recordBook:old.recordBook,legacyPlayers:S.legacyPlayers,faPool:null,gen:(old.ngCarry?old.ngCarry.gen:1)+1,expansionsDone:old.expansionsDone||[],coaches:old.coaches||{},relocations:old.relocations||[]};
-  save();initCreate();show("scrCreate");toast("Nouvelle partie + : la ligue continue en "+old.year+".");
+  S.ngCarry.postEvents=S.postEvents||[];
+  save();initCreate();show("scrCreate");const hb=$("heirBanner");if(hb)hb.style.display="none";toast("Nouvelle partie + : la ligue continue en "+old.year+".");
+}
+$("btnNGPlus").onclick=()=>{
+  const kids=heirCandidates();
+  if(kids.length){showEvent({title:"Nouvelle partie +",text:`Continuer dans cette ligue. Tu peux créer un nouveau joueur en ${S.year}, ou suivre la carrière d'un de tes enfants : la ligue avancera jusqu'à ses 16 ans et il héritera de tes forces.`,
+      choices:[...kids.map(k=>({label:`${k.name} ${S.player.last} (${S.year-k.born} ans)`,sub:`Héritier : +3 dans tes deux meilleurs attributs, nom lourd à porter`,run:()=>startHeir(k)})),{label:"Nouveau joueur",sub:"Carrière indépendante, même ligue",run:()=>ngPlus()}]});return;}
+  if(!confirm("Recommencer une carrière dans cette ligue (année "+S.year+", avec les joueurs tels qu'ils sont) ? Ta carrière actuelle sera archivée dans l'Histoire."))return;
+  ngPlus();
 };
 document.querySelectorAll("#gmTabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll("#gmTabs button").forEach(x=>x.classList.remove("on"));b.classList.add("on");document.querySelectorAll("#scrGM .tab").forEach(t=>t.classList.remove("on"));$(b.dataset.gtab).classList.add("on");});
 $("gmSim10").onclick=()=>gmSim(10);
@@ -3035,7 +3473,7 @@ $("gmSim1").onclick=()=>{const se=S.season;if(se.done||se.event)return;gmSim(1);
 $("gmSimAll").onclick=()=>{if(S.season.done){gmEndSeason();return;}gmSim(999);if(S.season.done&&!S.season.event)gmEndSeason();};
 $("gmNext").onclick=()=>gmNextSeason();
 $("gmRetire").onclick=()=>{S.gm.done=true;S.gmFinal={seasons:S.gm.seasons.length,cups:S.gmCups||0};save();gmFinalScreen();};
-function gmFinalScreen(){const f=S.gmFinal;$("rVerdict").innerHTML+=`<p style="margin-top:8px;color:var(--gold)">Puis ${f.seasons} saison${f.seasons>1?"s":""} comme DG${f.cups?` · ${f.cups} Coupe${f.cups>1?"s":""} bâtie${f.cups>1?"s":""}`:""}.</p>`;$("gmOfferCard").style.display="none";show("scrRetire");}
+function gmFinalScreen(){const f=S.gmFinal;$("rVerdict").innerHTML+=`<p style="margin-top:8px;color:var(--gold)">Puis ${f.seasons} saison${f.seasons>1?"s":""} comme ${isCoach()?"entraîneur-chef":"DG"}${f.cups?` · ${f.cups} Coupe${f.cups>1?"s":""} ${isCoach()?"gagnée":"bâtie"}${f.cups>1?"s":""}`:""}${S.gm&&S.gm.adams?` · ${S.gm.adams} Jack-Adams`:""}.</p>`;$("gmOfferCard").style.display="none";$("coachOfferCard").style.display="none";show("scrRetire");}
 $("btnExport").onclick=()=>{if(!S){toast("Aucune carrière à exporter.");return;}const data="CHK1"+btoa(unescape(encodeURIComponent(JSON.stringify(S))));$("saveBox").value=data;if(navigator.clipboard)navigator.clipboard.writeText(data).then(()=>toast("📤 Sauvegarde copiée !"),()=>toast("Sauvegarde affichée ci-dessous — copie-la."));else toast("Sauvegarde affichée ci-dessous — copie-la.");};
 $("btnImport").onclick=()=>{const v=$("saveBox").value.trim();if(!v.startsWith("CHK1")){toast("Sauvegarde invalide.");return;}try{const d=migrate(JSON.parse(decodeURIComponent(escape(atob(v.slice(4))))));if(!d.player)throw 0;if(S&&!confirm("Remplacer la carrière actuelle ?"))return;S=d;save();location.reload();}catch(e){toast("Impossible de lire cette sauvegarde.");}};
 $("btnMenu").onclick=()=>{openMenu();};
